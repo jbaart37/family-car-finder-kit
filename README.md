@@ -8,6 +8,22 @@ when the whole family loves the same car, it's a **💞 Family Match**: that's y
 
 It runs on one computer in your house. It's not a polished product or a hosted service, just a handy family tool.
 
+## Why not just use the "save" buttons on car sites?
+
+Car sites and dealers offer good tools for **one shopper**: a heart to save a car, a "My Garage" or favorites list, price-drop alerts,
+and a share button that sends a link. A family decision looks different:
+
+- **Everyone's saves end up in different places.** Mom's favorites are in her account on one site, the teenager's are on another site,
+  and Dad has a pile of links in a group text.
+- **There's no family vote.** You can share a link, but there's nowhere to see that two of you love a car and one of you can't stand it.
+- **There's no ranking across sites.** Each site ranks only its own listings. Nothing puts the Cars.com find next to the CarGurus deal
+  and the dealer's own listing, and sorts them by what the family thinks and how good the price is.
+- **No "which dealers are worth the drive."** Saved cars don't tell you which lots near you have several of your family's favorites,
+  so a Saturday of test drives can be planned around them.
+
+Family Car Finder doesn't replace those sites. It searches them, then gives your family **one shared list** to react to together,
+ranked by your votes and the price.
+
 ## 🔒 Privacy: it stays at home
 
 - **Runs on your own computer.** There's no account, no sign-up, no cloud server, and no tracking or analytics.
@@ -30,7 +46,7 @@ It runs on one computer in your house. It's not a polished product or a hosted s
 - **Keeps the list short:** ranks cars by price vs. estimated market value and shows the top picks, so you see a few dozen good options, not thousands.
 - **Puts cars you can go see first:** 📍 local dealers you can visit and test-drive are listed ahead of 🚚 online sellers that deliver.
 - **Lets everyone vote:** each person taps their name, then reacts to cars with **love / like / hate**. Votes show up for everyone.
-- **Learns from votes:** hate one Chevy Trax and every Trax sinks; like a model and it moves up a little. The **Family list** ranks everything you've voted on.
+- **Learns from votes:** hate one Studebaker Lark and every Lark sinks (Studebaker hasn't built a car since 1966, so no hard feelings); like a model and it moves up a little. The **Family list** ranks everything you've voted on.
 - **Shows which dealers are worth the drive:** **Dealers to visit** ranks nearby dealers by good matches and family favorites.
 - **Takes cars you found yourself:** **➕ Add a car we found** lets you paste a link and it fills in the details.
 - **Works on phones and computers.**
