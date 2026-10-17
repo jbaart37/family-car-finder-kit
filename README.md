@@ -8,6 +8,19 @@ when the whole family loves the same car, it's a **💞 Family Match**: that's y
 
 It runs on one computer in your house. It's not a polished product or a hosted service, just a handy family tool.
 
+## A quick look
+
+*Screenshots from a made-up demo family (Alex, Sam and Riley) searching near Chicago. Dealer names are blurred and listing photos are switched off.*
+
+| | |
+|---|---|
+| ![Who's car shopping? Each person picks their name](docs/screenshots/1-who-is-shopping.png) | ![It's a match: everyone loves the same car](docs/screenshots/2-family-match.png) |
+| **Who's shopping?** Tap your name; each person has their own look. | **💞 Family Match:** everyone loved the same car. Book that test drive. |
+| ![Top picks ranked by price vs. market, with the family's votes](docs/screenshots/3-top-picks.png) | ![The family list: matches first, then loved and liked](docs/screenshots/4-family-list.png) |
+| **Top picks:** local dealers first, price vs. market, everyone's votes. | **Family list:** matches on top, then loved and liked, cheaper first. |
+| ![Scoreboard with points and badges](docs/screenshots/5-scoreboard.png) | ![On a phone](docs/screenshots/6-phone.png) |
+| **🏆 Scoreboard:** points and badges for helping out. | **Works on phones,** with big buttons for quick votes. |
+
 ## Why not just use the "save" buttons on car sites?
 
 Car sites and dealers offer good tools for **one shopper**: a heart to save a car, a "My Garage" or favorites list, price-drop alerts,
