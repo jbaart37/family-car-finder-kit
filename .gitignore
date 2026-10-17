@@ -1,0 +1,8 @@
+config.json
+results/
+reports/
+.venv/
+__pycache__/
+*.pyc
+.vscode/
+.DS_Store

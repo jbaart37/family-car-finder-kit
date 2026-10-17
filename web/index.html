@@ -1,0 +1,1488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Car Finder</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%97%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@600;700&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #1b1f24; --muted: #66707c; --line: #e3e6ea;
+    --accent: #1f6feb; --accent-ink: #ffffff; --row-hover: #f2f6fd; --chip: #eef1f4;
+    --good: #1a7f37; --good-bg: #e6f4ea; --warn: #9a6700; --warn-bg: #fff4d6; --bad: #b42318; --bad-bg: #fdecea;
+    --local: #1a7f37; --local-bg: #e6f4ea; --online: #8250df; --online-bg: #f3edfc;
+    --t3: #0b5cad; --t3-bg: #e7f0fb;
+    --love: #d1245a; --love-bg: #fde8ef; --like: #0b5cad; --like-bg: #e7f0fb; --hate: #66707c; --hate-bg: #eef1f4;
+    --p0: #1f6feb; --p1: #bf3989; --p2: #c99700; --p3: #1a7f37; --p4: #8250df; --p5: #cf222e;
+    --header-bg: var(--panel); --header-ink: var(--ink); --header-line: var(--line);
+    --title-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --tab-line: 2px solid var(--accent);
+    --pattern: none;
+    --plate-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Crect x='3' y='5' width='10' height='3' rx='1.5' transform='rotate(45 8 6.5)'/%3E%3Crect x='15' y='19' width='10' height='3' rx='1.5' transform='rotate(-45 20 20.5)'/%3E%3C/g%3E%3C/svg%3E");
+    --plate-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cg fill='%2364748b' fill-opacity='0.13'%3E%3Crect x='3' y='5' width='10' height='3' rx='1.5' transform='rotate(45 8 6.5)'/%3E%3Crect x='15' y='19' width='10' height='3' rx='1.5' transform='rotate(-45 20 20.5)'/%3E%3C/g%3E%3C/svg%3E");
+    --hearts: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cg fill='%23d6457a' fill-opacity='0.08'%3E%3Cpath d='M24 34C10 25 17 13 24 20 31 13 38 25 24 34Z'/%3E%3Cpath d='M72 82C58 73 65 61 72 68 79 61 86 73 72 82Z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1216; --panel: #171b21; --ink: #e6e9ed; --muted: #98a2ae; --line: #2a3038;
+      --accent: #4c8dff; --accent-ink: #0b0d10; --row-hover: #1d232b; --chip: #232931;
+      --good: #57c27a; --good-bg: #16301f; --warn: #e2b340; --warn-bg: #352a10; --bad: #ff7b72; --bad-bg: #3a1714;
+      --local: #57c27a; --local-bg: #16301f; --online: #c09cf5; --online-bg: #2a2140;
+      --t3: #79b3ff; --t3-bg: #142a45;
+      --love: #ff7aa2; --love-bg: #3d1424; --like: #79b3ff; --like-bg: #142a45; --hate: #98a2ae; --hate-bg: #232931;
+      --p0: #79b3ff; --p1: #f08ac3; --p2: #f2d34f; --p3: #57c27a; --p4: #c09cf5; --p5: #ff7b72;
+    }
+  }
+
+  /* ---------- Ballpark theme: softball field, dogs, capybaras ---------- */
+  html[data-theme="ballpark"] {
+    --bg: #fbf7ea; --panel: #fffdf6; --ink: #22301f; --muted: #6b705c; --line: #e8e0c4;
+    --accent: #2f7d3a; --accent-ink: #ffffff; --row-hover: #f4f8e4; --chip: #f1f3d6;
+    --header-bg: linear-gradient(180deg, #2f8a3e 0%, #24702f 100%); --header-ink: #ffffff; --header-line: #f7f7f2;
+    --title-font: "Fredoka", system-ui, sans-serif;
+    --tab-line: 3px dashed #d6282c;
+    --love: #d6282c; --love-bg: #fde6e4; --like: #9a5b2c; --like-bg: #f6e9dc; --hate: #6b705c; --hate-bg: #ecebe1;
+    --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23a8743f' fill-opacity='0.07'%3E%3Cellipse cx='30' cy='34' rx='9' ry='7'/%3E%3Ccircle cx='19' cy='24' r='3.6'/%3E%3Ccircle cx='26' cy='19' r='3.6'/%3E%3Ccircle cx='34' cy='19' r='3.6'/%3E%3Ccircle cx='41' cy='24' r='3.6'/%3E%3Cellipse cx='88' cy='94' rx='9' ry='7'/%3E%3Ccircle cx='77' cy='84' r='3.6'/%3E%3Ccircle cx='84' cy='79' r='3.6'/%3E%3Ccircle cx='92' cy='79' r='3.6'/%3E%3Ccircle cx='99' cy='84' r='3.6'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  @media (prefers-color-scheme: dark) {
+    html[data-theme="ballpark"] {
+      --bg: #0d1a11; --panel: #13241a; --ink: #eef2e6; --muted: #a3ae98; --line: #24392a;
+      --accent: #e3f24a; --accent-ink: #13241a; --row-hover: #183020; --chip: #1c3324;
+      --header-bg: linear-gradient(180deg, #1b4a26 0%, #13361b 100%);
+      --love: #ff8a80; --love-bg: #3a1714; --like: #e0a46d; --like-bg: #33230f; --hate: #a3ae98; --hate-bg: #1c3324;
+    }
+  }
+
+  /* ---------- Farmhouse theme: hearts, dogs, goats and sheep ---------- */
+  html[data-theme="farmhouse"] {
+    --bg: #fdf4f6; --panel: #fffafb; --ink: #3a2430; --muted: #8b6b79; --line: #f0d9e1;
+    --accent: #cf3f74; --accent-ink: #ffffff; --row-hover: #fdecf2; --chip: #fae6ee;
+    --header-bg: linear-gradient(180deg, #ec7ba4 0%, #cf4a7e 100%); --header-ink: #ffffff; --header-line: #ffd6e5;
+    --title-font: "Quicksand", system-ui, sans-serif;
+    --tab-line: 3px solid #cf3f74;
+    --love: #cf3f74; --love-bg: #fde4ee; --like: #7a6a5a; --like-bg: #f3ece4; --hate: #8b6b79; --hate-bg: #f3e8ec;
+    --pattern: var(--hearts);
+  }
+  @media (prefers-color-scheme: dark) {
+    html[data-theme="farmhouse"] {
+      --bg: #1c1116; --panel: #26171e; --ink: #f7e8ee; --muted: #c09aab; --line: #3d2530;
+      --accent: #ff8fb7; --accent-ink: #2a1018; --row-hover: #2e1c24; --chip: #33202a;
+      --header-bg: linear-gradient(180deg, #8e2f57 0%, #6d2343 100%);
+      --love: #ff8fb7; --love-bg: #44192b; --like: #d9c3a8; --like-bg: #33281d; --hate: #c09aab; --hate-bg: #33202a;
+    }
+  }
+  html[data-theme="farmhouse"] header { border-bottom: 4px dotted var(--header-line); padding: 14px 24px; }
+  html[data-theme="farmhouse"] header h1 { font-weight: 700; }
+  html[data-theme="farmhouse"] .tab { font-family: var(--title-font); font-weight: 700; font-size: 15px; }
+  html[data-theme="farmhouse"] img.thumb, html[data-theme="farmhouse"] .card .ph img { border-radius: 14px; border: 2px solid #f6c1d4; }
+  html[data-theme="farmhouse"] a.view { color: #b8346a; }
+
+  /* ---------- Truck Yard theme: pickups, diamond plate, hazard stripes ---------- */
+  html[data-theme="truckyard"] {
+    --bg: #eceff2; --panel: #ffffff; --ink: #1c232b; --muted: #5d6875; --line: #d5dbe1;
+    --accent: #ea580c; --accent-ink: #ffffff; --row-hover: #f3f5f7; --chip: #e3e7eb;
+    --header-bg: var(--plate-light), linear-gradient(180deg, #3a4450 0%, #232a33 100%); --header-ink: #f8fafc; --header-line: #f59e0b;
+    --title-font: "Oswald", system-ui, sans-serif;
+    --tab-line: 3px solid #ea580c;
+    --love: #c2410c; --love-bg: #ffedd5; --like: #1d4ed8; --like-bg: #e0e9fb; --hate: #5d6875; --hate-bg: #e3e7eb;
+    --pattern: var(--plate-dark);
+  }
+  @media (prefers-color-scheme: dark) {
+    html[data-theme="truckyard"] {
+      --bg: #111418; --panel: #181d23; --ink: #e5e9ee; --muted: #9aa5b1; --line: #2a313a;
+      --accent: #fb923c; --accent-ink: #1a1006; --row-hover: #1f252d; --chip: #232a33;
+      --love: #fb923c; --love-bg: #3a1d0a; --like: #93b4ff; --like-bg: #172440; --hate: #9aa5b1; --hate-bg: #232a33;
+    }
+  }
+  html[data-theme="truckyard"] header { border-bottom: 6px solid transparent; border-image: repeating-linear-gradient(-45deg, #f59e0b 0 12px, #111827 12px 24px) 6; padding: 14px 24px; }
+  html[data-theme="truckyard"] header h1 { text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+  html[data-theme="truckyard"] .tab { font-family: var(--title-font); text-transform: uppercase; letter-spacing: .05em; font-size: 14px; font-weight: 500; }
+  html[data-theme="truckyard"] .section-title { text-transform: uppercase; letter-spacing: .03em; }
+  html[data-theme="truckyard"] img.thumb, html[data-theme="truckyard"] .card .ph img { border-radius: 3px; border: 2px solid #9aa5b1; }
+  html[data-theme="truckyard"] a.view { color: #c2410c; }
+  @media (prefers-color-scheme: dark) { html[data-theme="truckyard"] a.view { color: #fb923c; } html[data-theme="farmhouse"] a.view { color: #ff8fb7; } }
+
+  header .theme-sel { width: auto; background: transparent; color: var(--header-ink); border: 1px solid color-mix(in srgb, var(--header-ink) 35%, transparent); border-radius: 7px; padding: 6px 8px; }
+  header .theme-sel option { color: #1b1f24; background: #fff; }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg) var(--pattern); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 12px 24px; background: var(--header-bg); color: var(--header-ink); border-bottom: 1px solid var(--header-line); }
+  html[data-theme="ballpark"] header { border-bottom: 4px solid var(--header-line); padding: 14px 24px; }
+  header h1 { font: 700 19px/1.1 var(--title-font); margin: 0; letter-spacing: -.01em; display: flex; align-items: center; gap: 8px; }
+  header h1 small { display: block; font-size: 12px; font-weight: 500; opacity: .85; letter-spacing: 0; }
+  header h1 small[hidden] { display: none; }
+  .statusrow { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin: 4px 0 8px; }
+  .statusrow .status { margin: 0; }
+  .statusrow select { width: auto; max-width: 240px; flex: none; }
+  header .ghost { color: var(--header-ink); border-color: color-mix(in srgb, var(--header-ink) 35%, transparent); }
+  .mascots { display: flex; align-items: flex-end; gap: 4px; }
+  html[data-theme="ballpark"] .mascots { display: flex; }
+  .mascots svg { display: block; }
+  .spacer { flex: 1; }
+  .summary { background: var(--chip); color: var(--ink); border-radius: 999px; padding: 5px 12px; font-size: 13px; }
+  main { padding: 16px 24px 40px; max-width: 1640px; margin: 0 auto; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  form.search { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px 14px; align-items: end; }
+  label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  input, select, button, textarea { font: inherit; color: var(--ink); }
+  input[type=text], input[type=number], input[type=url], select, textarea { padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); width: 100%; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .wide { grid-column: span 2; }
+  .checks { display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 6px 0; }
+  .checks label { flex-direction: row; align-items: center; gap: 5px; font-weight: 400; color: var(--ink); font-size: 13px; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 7px; padding: 8px 16px; font-weight: 600; cursor: pointer; }
+  button.primary:disabled, button.ghost:disabled { opacity: .55; cursor: progress; }
+  button.ghost { background: transparent; border: 1px solid var(--line); border-radius: 7px; padding: 6px 12px; cursor: pointer; }
+  button.ghost:hover { background: var(--row-hover); }
+  header button.ghost:hover { background: color-mix(in srgb, var(--header-ink) 12%, transparent); }
+  .status { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0 8px; color: var(--muted); font-size: 13px; }
+  .chip { background: var(--chip); border-radius: 999px; padding: 3px 10px; font-size: 12px; color: var(--ink); }
+  .chip.err { background: var(--bad-bg); color: var(--bad); }
+  .tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--line); }
+  .tab { padding: 9px 14px; cursor: pointer; border: 0; background: none; color: var(--muted); font-weight: 600; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+  html[data-theme="ballpark"] .tab { font-family: var(--title-font); font-size: 15px; }
+  .tab.on { color: var(--ink); border-bottom: var(--tab-line); }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; padding: 12px 0; }
+  .toolbar input[type=text] { max-width: 260px; }
+  .tablewrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; white-space: nowrap; }
+  th { background: var(--panel); font-size: 12px; color: var(--muted); cursor: pointer; user-select: none; }
+  th.sorted::after { content: " ▲"; font-size: 10px; } th.sorted.desc::after { content: " ▼"; }
+  th.nosort { cursor: default; }
+  tbody tr:hover { background: var(--row-hover); }
+  tr.hated { opacity: .5; }
+  tr.hated:hover { opacity: .85; }
+  tr.section td { background: var(--bg); padding: 14px 12px 10px; white-space: normal; }
+  tr.section:hover td { background: var(--bg); }
+  .section-title { font: 700 15px var(--title-font); }
+  .section-title.local { color: var(--local); } .section-title.online { color: var(--online); }
+  .section-title.loved { color: var(--love); } .section-title.liked { color: var(--like); }
+  .section-title.mixed, .section-title.hated { color: var(--muted); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.model { white-space: normal; min-width: 140px; }
+  td.model a { color: var(--ink); font-weight: 600; text-decoration: none; }
+  td.model a:hover { color: var(--accent); text-decoration: underline; }
+  .sub { color: var(--muted); font-size: 12px; }
+  td.dealer { white-space: normal; min-width: 150px; max-width: 230px; }
+  td.note { white-space: normal; min-width: 140px; max-width: 260px; }
+  img.thumb { width: 84px; height: 56px; object-fit: cover; border-radius: 5px; background: var(--chip); display: block; }
+  html[data-theme="ballpark"] img.thumb { border-radius: 10px; border: 2px solid #e3f24a; }
+  .badge { display: inline-block; border-radius: 5px; padding: 2px 7px; font-size: 12px; font-weight: 600; }
+  .below { color: var(--good); background: var(--good-bg); }
+  .above { color: var(--bad); background: var(--bad-bg); }
+  .even, .unknown { color: var(--muted); background: var(--chip); }
+  .rough { font-style: italic; font-weight: 500; }
+  .where-local { color: var(--local); background: var(--local-bg); }
+  .where-online { color: var(--online); background: var(--online-bg); }
+  .cpo { color: var(--t3); background: var(--t3-bg); font-size: 11px; }
+  .badge.size { color: var(--muted); background: var(--chip); font-size: 11px; font-weight: 600; padding: 1px 6px; }
+  .badge.sunk { color: var(--bad); background: var(--bad-bg); font-size: 11px; padding: 1px 6px; }
+  .badge.boost { color: var(--good); background: var(--good-bg); font-size: 11px; padding: 1px 6px; }
+  .steer { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: -4px 0 10px; font-size: 12px; color: var(--muted); }
+  .steer[hidden] { display: none; }
+  .steer .chip.sunk { color: var(--bad); background: var(--bad-bg); }
+  .steer .chip.boost { color: var(--good); background: var(--good-bg); }
+  .manual { color: var(--warn); background: var(--warn-bg); font-size: 11px; }
+  .found-card { display: flex; gap: 12px; align-items: center; background: var(--good-bg); border: 1px solid color-mix(in srgb, var(--good) 30%, transparent); border-radius: 10px; padding: 10px; }
+  .found-card[hidden] { display: none; }
+  .found-card img { width: 112px; height: 76px; object-fit: cover; border-radius: 8px; background: var(--chip); flex: none; }
+  .found-card .ttl { font-weight: 700; }
+  .found-card.warn { background: var(--warn-bg); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
+  a.view { color: var(--accent); text-decoration: none; margin-right: 8px; }
+  html[data-theme="ballpark"] a.view { color: #2f7d3a; }
+  @media (prefers-color-scheme: dark) { html[data-theme="ballpark"] a.view { color: #e3f24a; } }
+  a.view:hover { text-decoration: underline; }
+
+  /* photo preview */
+  tr[data-card], .card[data-card] { cursor: pointer; }
+  tr[data-card]:hover td.model a, .card[data-card]:hover .ttl a { color: var(--accent); text-decoration: underline; }
+  .thumb-btn { padding: 0; border: 0; background: none; cursor: zoom-in; display: block; border-radius: 6px; position: relative; }
+  .thumb-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .thumb-btn::after { content: "⤢"; position: absolute; right: 4px; bottom: 4px; width: 18px; height: 18px; border-radius: 4px; background: rgba(0,0,0,.55);
+    color: #fff; font-size: 12px; line-height: 18px; text-align: center; opacity: 0; transition: opacity .15s; }
+  .thumb-btn:hover::after, .thumb-btn:focus-visible::after { opacity: 1; }
+  dialog.photo-dlg { width: min(980px, calc(100vw - 24px)); padding: 0; overflow: hidden; }
+  .photo-stage { position: relative; background: #0b0d10; display: grid; place-items: center; min-height: 260px; touch-action: pan-y; }
+  .photo-stage img { display: block; width: 100%; max-height: min(66vh, 640px); object-fit: contain; }
+  .photo-none { color: #9aa5b1; padding: 90px 20px; text-align: center; }
+  .photo-nav, .photo-close { position: absolute; border: 0; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; cursor: pointer;
+    width: 44px; height: 44px; font-size: 22px; line-height: 44px; display: grid; place-items: center; }
+  .photo-nav:hover, .photo-close:hover { background: rgba(0,0,0,.8); }
+  .photo-nav.prev { left: 10px; top: 50%; transform: translateY(-50%); }
+  .photo-nav.next { right: 10px; top: 50%; transform: translateY(-50%); }
+  .photo-close { top: 10px; right: 10px; width: 38px; height: 38px; font-size: 18px; }
+  .photo-count { position: absolute; left: 12px; top: 12px; color: #fff; background: rgba(0,0,0,.55); border-radius: 999px; padding: 2px 10px; font-size: 12px; }
+  .photo-info { padding: 14px 18px 16px; display: grid; gap: 8px; }
+  .photo-info .ttl { font: 700 19px/1.25 var(--title-font); }
+  .photo-info .row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+  .photo-info .price { font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .photo-info .row.split { justify-content: space-between; border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 2px; }
+  a.go { background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 14px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  a.go:hover { filter: brightness(1.08); }
+  @media (max-width: 760px) {
+    dialog.photo-dlg { width: calc(100vw - 12px); max-height: calc(100dvh - 12px); overflow: auto; }
+    .photo-stage img { max-height: 48vh; }
+    .photo-nav { width: 38px; height: 38px; font-size: 18px; }
+  }
+  .rank { font: 700 15px var(--title-font); color: var(--muted); }
+  .points { font-weight: 700; }
+
+  /* family votes */
+  .votes { display: flex; gap: 5px; align-items: center; }
+  .pv { display: inline-flex; align-items: center; gap: 3px; border-radius: 999px; padding: 1px 7px 1px 2px; font-size: 12px; background: var(--chip); }
+  .pv .init { min-width: 18px; padding: 0 3px; height: 18px; border-radius: 999px; background: var(--pc); color: #fff; font-size: 10px; font-weight: 700; display: inline-grid; place-items: center; }
+  .pv.none { opacity: .45; }
+  .mine { display: inline-flex; gap: 1px; border: 1.5px solid var(--pc); border-radius: 999px; padding: 1px 3px 1px 2px; align-items: center; }
+  .vb { border: 0; background: none; cursor: pointer; font-size: 15px; line-height: 1; padding: 2px 3px; border-radius: 999px; filter: grayscale(1); opacity: .45; }
+  .vb:hover { opacity: .9; filter: none; }
+  .vb.on { filter: none; opacity: 1; background: var(--chip); transform: scale(1.12); }
+  .legend { display: inline-flex; gap: 10px; font-size: 12px; color: var(--muted); }
+
+  tr.clickable { cursor: pointer; }
+  .empty { padding: 40px; text-align: center; color: var(--muted); }
+  .empty svg { display: block; margin: 0 auto 10px; }
+  .note { font-size: 12px; color: var(--muted); }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -3px; }
+  html[data-theme="ballpark"] .spinner { border: 0; background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23e3f24a' stroke='%23c4d22c' stroke-width='2'/%3E%3Cpath d='M15 9c12 12 12 34 0 46M49 9c-12 12-12 34 0 46' fill='none' stroke='%23d6282c' stroke-width='3' stroke-dasharray='4 3'/%3E%3C/svg%3E"); width: 20px; height: 20px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .banner { background: var(--warn-bg); color: var(--warn); padding: 8px 12px; border-radius: 7px; margin-bottom: 12px; font-size: 13px; }
+
+  /* dialogs */
+  dialog { border: 1px solid var(--line); border-radius: 14px; padding: 0; background: var(--panel); color: var(--ink); width: min(640px, calc(100vw - 32px)); box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+  dialog::backdrop { background: rgba(10, 15, 20, .45); }
+  .dlg-head { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .dlg-head h2 { font: 700 17px var(--title-font); margin: 0; }
+  .dlg-body { padding: 16px 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 12px; }
+  .dlg-body .full { grid-column: 1 / -1; }
+  .dlg-body .half { grid-column: span 2; }
+  .dlg-foot { display: flex; gap: 8px; justify-content: flex-end; padding: 12px 18px; border-top: 1px solid var(--line); }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg label { flex-direction: row; align-items: center; gap: 6px; padding: 6px 10px; cursor: pointer; color: var(--ink); font-weight: 500; font-size: 13px; }
+  .seg input { margin: 0; }
+  .seg label:has(input:checked) { background: var(--chip); font-weight: 700; }
+  .who-pick { display: flex; gap: 12px; justify-content: center; padding: 24px 18px 28px; flex-wrap: wrap; }
+  .who-pick button { border: 2px solid var(--line); background: var(--bg); border-radius: 14px; padding: 16px 22px; cursor: pointer; font: 600 16px var(--title-font); min-width: 140px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .who-pick button:hover { border-color: var(--pc); }
+  .who-pick .init { width: 44px; height: 44px; border-radius: 50%; background: var(--pc); color: #fff; display: grid; place-items: center; font-size: 18px; }
+  dialog { max-height: calc(100dvh - 24px); overflow: auto; }
+
+  /* landing: who's shopping? */
+  body.locked { overflow: hidden; }
+  .landing { position: fixed; inset: 0; z-index: 50; background: var(--bg) var(--pattern); display: grid; place-items: center; padding: 20px; overflow: auto; }
+  .landing[hidden] { display: none; }
+  .landing-card { text-align: center; max-width: 720px; width: 100%; }
+  .landing-card h2 { font: 700 30px/1.15 "Fredoka", system-ui, sans-serif; margin: 10px 0 6px; }
+  .landing-card .lead { color: var(--muted); margin: 0 0 22px; }
+  .landing-art { display: flex; justify-content: center; align-items: flex-end; gap: 8px; font-size: 44px; }
+  .who-pick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .who-pick button { border: 2px solid var(--line); background: var(--panel); border-radius: 18px; padding: 22px 14px; cursor: pointer;
+    font: 600 20px "Fredoka", system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--ink);
+    transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease; }
+  .who-pick button:hover, .who-pick button:focus-visible { transform: translateY(-3px); border-color: var(--pc); box-shadow: 0 8px 24px color-mix(in srgb, var(--pc) 25%, transparent); outline: none; }
+  .who-pick .init { width: 64px; height: 64px; border-radius: 50%; background: var(--pc); color: #fff; display: grid; place-items: center; font-size: 28px; flex: none; }
+  .who-pick .tag { font: 400 13px system-ui, sans-serif; color: var(--muted); }
+  .who-pick button.ballpark { background: linear-gradient(180deg, #2f8a3e, #24702f); color: #fff; border-color: #e3f24a; }
+  .who-pick button.ballpark .tag { color: #eaf5d0; }
+  .who-pick button svg { flex: none; }
+  .who-pick .last { font-size: 11px; font-weight: 600; color: var(--accent); }
+  .who-pick button.ballpark .last { color: #e3f24a; }
+  .who-pick button.farmhouse { background: var(--hearts), linear-gradient(180deg, #f08bb0, #cf4a7e); color: #fff; border-color: #ffd6e5; font-family: "Quicksand", system-ui, sans-serif; font-weight: 700; }
+  .who-pick button.farmhouse .tag { color: #ffe9f1; }
+  .who-pick button.truckyard { background: var(--plate-light), linear-gradient(180deg, #3a4450, #232a33); color: #fff; border-color: #f59e0b; font-family: "Oswald", system-ui, sans-serif; text-transform: uppercase; letter-spacing: .04em; }
+  .who-pick button.truckyard .tag { color: #d6dde5; text-transform: none; letter-spacing: 0; }
+  .who-pick button.farmhouse .last, .who-pick button.truckyard .last { color: #fff; }
+  .landing-art { flex-wrap: wrap; }
+
+  /* phone cards */
+  .cardwrap { display: flex; flex-direction: column; gap: 10px; }
+  .card { display: grid; grid-template-columns: 104px 1fr; gap: 8px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
+  .card.noimg { grid-template-columns: 1fr; }
+  .card.hated { opacity: .55; }
+  .card .ph img { width: 104px; height: 78px; object-fit: cover; border-radius: 10px; display: block; background: var(--chip); }
+  html[data-theme="ballpark"] .card .ph img { border: 2px solid #e3f24a; }
+  .card .ttl { font-weight: 700; font-size: 15px; line-height: 1.25; }
+  .card .ttl a { color: var(--ink); text-decoration: none; }
+  .card .price-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 4px; }
+  .card .price { font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .card .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-top: 4px; font-size: 13px; }
+  .card .foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; border-top: 1px dashed var(--line); padding-top: 8px; }
+  .card .links { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 4px; }
+  .card-section { padding: 8px 4px 0; }
+  .card .rank { margin-right: 4px; }
+
+  /* reaction flurries */
+  .fx-layer { position: fixed; inset: 0; pointer-events: none; z-index: 9999; overflow: hidden; }
+  .fx { position: absolute; left: 0; top: 0; line-height: 1; user-select: none; will-change: transform, opacity; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-7px) rotate(-1deg); } 40% { transform: translateX(6px) rotate(1deg); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+  .shake { animation: shake .45s ease; }
+  @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.45); } 100% { transform: scale(1.12); } }
+  .vb.pop { animation: pop .35s ease; }
+
+  @media (max-width: 760px) {
+    header { padding: 10px 12px; gap: 8px; }
+    html[data-theme] header { padding: 10px 12px; }
+    header h1 { font-size: 17px; }
+    header h1 small { display: none; }
+    header .spacer { display: none; }
+    header .ghost { padding: 5px 9px; font-size: 12px; }
+    .mascots svg:not(:last-child) { display: none; }
+    .summary { order: 10; flex: 1 1 100%; font-size: 12px; text-align: center; }
+    main { padding: 10px 10px 32px; }
+    .statusrow { flex-wrap: wrap; }
+    .statusrow select { width: 100%; max-width: none; }
+    .status { font-size: 12px; }
+    .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { white-space: nowrap; padding: 9px 10px; }
+    .toolbar { gap: 8px; }
+    .toolbar input[type=text] { max-width: none; flex: 1 1 100%; }
+    .toolbar .spacer, .legend { display: none; }
+    #addBtn { flex: 1 1 auto; }
+    .vb { font-size: 21px; padding: 6px 7px; }
+    .pv { font-size: 14px; padding: 2px 8px 2px 2px; }
+    .pv .init { min-width: 22px; height: 22px; font-size: 11px; }
+    .wide { grid-column: span 1; }
+    form.search { grid-template-columns: 1fr 1fr; }
+    input[type=text], input[type=number], input[type=url], select, textarea { font-size: 16px; }  /* stops iOS zoom-on-focus */
+    .dlg-body { grid-template-columns: 1fr 1fr; }
+    .who-pick { grid-template-columns: 1fr; }
+    .who-pick button { flex-direction: row; justify-content: flex-start; padding: 14px 18px; gap: 14px; text-align: left; }
+    .who-pick .init { width: 48px; height: 48px; font-size: 22px; }
+    .who-pick button svg { width: 48px; height: 48px; }
+    .landing-card h2 { font-size: 26px; }
+    p.note { font-size: 11px; }
+  }
+</style>
+<!--PRELOAD-->
+</head>
+<body>
+<header>
+  <h1><span id="logo">🚗</span><span><span id="titleText">Car Finder</span><small id="subtitle" hidden></small></span></h1>
+  <div class="mascots" id="mascots" aria-hidden="true"></div>
+  <span class="summary" id="summary">Family filters</span>
+  <button class="ghost" id="toggleForm">Edit filters</button>
+  <span class="spacer"></span>
+  <select id="themeSel" class="theme-sel" title="Page theme"></select>
+  <button class="ghost" id="whoBtn">Viewing as: <b id="whoName">—</b></button>
+</header>
+<main>
+  <div id="staticBanner" class="banner" hidden>Snapshot report (read-only). To vote or add cars, open the Car Finder page from the PC running <code>python car_agent.py serve --share</code>.</div>
+
+  <section class="panel" id="formPanel" hidden>
+    <form class="search" id="form">
+      <label>ZIP code <input type="text" name="zip" inputmode="numeric" maxlength="5" required></label>
+      <label>Within
+        <select name="radius">
+          <option value="10">10 mi</option><option value="25">25 mi</option><option value="50">50 mi</option>
+          <option value="75">75 mi</option><option value="100">100 mi</option><option value="200">200 mi</option>
+        </select>
+      </label>
+      <label>Body style <select name="body" id="body"></select></label>
+      <label>Max price ($) <input type="number" name="max_price" step="500" min="0" placeholder="any"></label>
+      <label>Max mileage <input type="number" name="max_miles" step="5000" min="0" placeholder="any"></label>
+      <label>Min year <input type="number" name="min_year" min="1990" max="2030" placeholder="any"></label>
+      <label class="wide">Make / model (optional, comma-separated) <input type="text" name="keywords" placeholder="Toyota RAV4, Honda CR-V, Subaru"></label>
+      <label class="wide">Seller quality
+        <select name="min_tier">
+          <option value="0">Everyone (incl. private sellers)</option>
+          <option value="1">Dealers only</option>
+          <option value="2">Franchise / high-volume dealers and up</option>
+          <option value="3">Major dealer groups &amp; national retailers</option>
+        </select>
+      </label>
+      <label>Top local picks <input type="number" name="max_local" min="0" max="500"></label>
+      <label>Top online picks <input type="number" name="max_online" min="0" max="500"></label>
+      <label>Max per model <input type="number" name="max_per_model" min="0" max="50"></label>
+      <div class="wide" id="sizeBox"><span class="note" style="font-weight:600">SUV sizes</span><div class="checks">
+        <label><input type="checkbox" name="size" value="subcompact"> Subcompact</label>
+        <label><input type="checkbox" name="size" value="compact"> Compact</label>
+        <label><input type="checkbox" name="size" value="midsize"> Midsize</label>
+        <label><input type="checkbox" name="size" value="fullsize"> Full-size</label></div></div>
+      <div class="wide"><span class="note" style="font-weight:600">Sites</span><div class="checks" id="sources"></div></div>
+      <div class="actions wide">
+        <button class="primary" id="go" type="submit">Search</button>
+        <button class="ghost" id="saveProfile" type="button" title="Everyone in the family gets these filters">Save as family filters</button>
+      </div>
+    </form>
+  </section>
+
+  <div class="statusrow">
+    <div class="status" id="status"></div>
+    <select id="saved" title="Past searches"><option value="">Past searches</option></select>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-tab="family"><span data-label="family">Family list</span> <span id="nFamily"></span></button>
+    <button class="tab" data-tab="picks"><span data-label="picks">Top picks</span> <span id="nPicks"></span></button>
+    <button class="tab" data-tab="all">All matches <span id="nAll"></span></button>
+    <button class="tab" data-tab="dealers">Dealers to visit <span id="nDealers"></span></button>
+    <button class="tab" data-tab="models">By model <span id="nModels"></span></button>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" id="quick" placeholder="Filter… (model, dealer, town)">
+    <div class="checks">
+      <label><input type="checkbox" id="showOnline" checked> Include online sellers</label>
+      <label><input type="checkbox" id="showPhotos" checked> Photos</label>
+      <label title="A model the family voted down sinks to the bottom; a model the family likes moves up a little"><input type="checkbox" id="useVotes" checked> Rank models by family votes</label>
+    </div>
+    <span class="legend" id="legend"></span>
+    <span class="spacer"></span>
+    <button class="ghost" id="clearFilter" hidden>✕ <span></span></button>
+    <button class="primary" id="addBtn">➕ Add a car we found</button>
+    <button class="ghost" id="csv">Export CSV</button>
+  </div>
+
+  <div class="steer" id="steer" hidden></div>
+  <div class="tablewrap" id="view"><div class="empty">Loading…</div></div>
+  <p class="note">
+    <b>Family list</b> ranks every car someone voted on or added: love = +3, like = +1, hate = −3. Ties go to the lower price.
+    <b>Est. vs market</b> compares the price with an estimated fair price for that year and mileage. Plain values come from CarGurus' estimate,
+    or a fit over CarGurus' estimates for similar cars. <i>Italic ~values</i> are rougher, based on asking prices in this search.
+    <b>Top picks</b> rank by price vs. market, with small boosts for low miles and bigger dealers, and a cap per model.
+    Always confirm price and availability on the listing.
+  </p>
+</main>
+
+<section class="landing" id="landing" hidden>
+  <div class="landing-card">
+    <div class="landing-art" id="landingArt"></div>
+    <h2>Who's car shopping?</h2>
+    <p class="lead">Pick your name. This phone or computer will remember you, and your votes show up for everyone.</p>
+    <div class="who-pick" id="whoPick"></div>
+  </div>
+</section>
+<div class="fx-layer" id="fx" aria-hidden="true"></div>
+
+<dialog id="photoDlg" class="photo-dlg" aria-label="Photo preview">
+  <div class="photo-stage" id="photoStage">
+    <img id="photoImg" alt="" referrerpolicy="no-referrer">
+    <div class="photo-none" id="photoNone" hidden>No photo for this car. Open the listing to see more.</div>
+    <button class="photo-nav prev" id="photoPrev" type="button" title="Previous car (←)">‹</button>
+    <button class="photo-nav next" id="photoNext" type="button" title="Next car (→)">›</button>
+    <button class="photo-close" id="photoClose" type="button" title="Close (Esc)">✕</button>
+    <span class="photo-count" id="photoCount"></span>
+  </div>
+  <div class="photo-info" id="photoInfo"></div>
+  <div class="fx-layer fx-local" aria-hidden="true"></div>
+</dialog>
+
+<dialog id="addDlg">
+  <form id="addForm" method="dialog">
+    <div class="dlg-head"><span id="addIcon">➕</span><h2>Add a car we found</h2></div>
+    <div class="dlg-body">
+      <label class="full">Link to the listing
+        <span class="actions" style="flex-wrap:nowrap">
+          <input type="url" name="url" placeholder="https://…" required>
+          <button class="ghost" type="button" id="lookupBtn" style="white-space:nowrap">🔎 Get details</button>
+        </span>
+      </label>
+      <div class="full note" id="lookupMsg"></div>
+      <div class="full found-card" id="foundCard" hidden></div>
+      <label>Year <input type="number" name="year" min="1980" max="2030"></label>
+      <label>Make <input type="text" name="make"></label>
+      <label class="half">Model <input type="text" name="model"></label>
+      <label class="half">Trim <input type="text" name="trim"></label>
+      <label>Mileage <input type="number" name="mileage" min="0"></label>
+      <label>Price ($) <input type="number" name="price" min="0"></label>
+      <label class="half">Dealer / seller <input type="text" name="dealer"></label>
+      <label>Town <input type="text" name="city"></label>
+      <label>Miles away <input type="number" name="distance" min="0" step="1"></label>
+      <div class="full actions">
+        <span class="seg">
+          <label><input type="radio" name="channel" value="local" checked> 📍 Local, can go see it</label>
+          <label><input type="radio" name="channel" value="online"> 🚚 Online / delivered</label>
+        </span>
+      </div>
+      <div class="full actions"><span class="note" style="font-weight:600">Your vote</span> <span class="seg" id="addVote"></span></div>
+      <label class="full">Note for the family <textarea name="note" rows="2" maxlength="300" placeholder="Why it caught your eye…"></textarea></label>
+      <input type="hidden" name="image"><input type="hidden" name="vin"><input type="hidden" name="source"><input type="hidden" name="title"><input type="hidden" name="market_value"><input type="hidden" name="market_src">
+    </div>
+    <div class="dlg-foot">
+      <span class="note" id="addMsg" style="margin-right:auto"></span>
+      <button class="ghost" type="button" id="addCancel">Cancel</button>
+      <button class="primary" type="submit" id="addSave">Add to family list</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => n == null ? "—" : "$" + Math.round(n).toLocaleString();
+const num = n => n == null ? "—" : Math.round(n).toLocaleString();
+const STATIC = location.protocol === "file:";
+const store = {
+  get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+
+/* ---------- art (hand-drawn inline SVG) ---------- */
+const ART = {
+  softball: (s = 34) => `<svg width="${s}" height="${s}" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#e3f24a" stroke="#c4d22c" stroke-width="2"/><path d="M15 9c12 12 12 34 0 46M49 9c-12 12-12 34 0 46" fill="none" stroke="#d6282c" stroke-width="3" stroke-dasharray="4 3"/></svg>`,
+  dog: (s = 40) => `<svg width="${s}" height="${s}" viewBox="0 0 64 64"><ellipse cx="13" cy="30" rx="8" ry="15" fill="#6e4126" transform="rotate(12 13 30)"/><ellipse cx="51" cy="30" rx="8" ry="15" fill="#6e4126" transform="rotate(-12 51 30)"/><circle cx="32" cy="33" r="19" fill="#d9a066"/><ellipse cx="32" cy="43" rx="10" ry="8" fill="#f5dcb6"/><circle cx="25" cy="29" r="2.6" fill="#1d1d1d"/><circle cx="39" cy="29" r="2.6" fill="#1d1d1d"/><circle cx="25.8" cy="28.2" r=".8" fill="#fff"/><circle cx="39.8" cy="28.2" r=".8" fill="#fff"/><ellipse cx="32" cy="38.5" rx="4" ry="3" fill="#1d1d1d"/><path d="M32 41.5v3M28 46q4 3 8 0" stroke="#1d1d1d" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M31 49q1 5 3 0" fill="#e86a7a"/></svg>`,
+  capybara: (s = 64) => `<svg width="${s}" height="${Math.round(s * .66)}" viewBox="0 0 120 80"><ellipse cx="54" cy="49" rx="40" ry="22" fill="#a0714a"/><rect x="22" y="58" width="10" height="16" rx="4" fill="#87603d"/><rect x="38" y="61" width="10" height="14" rx="4" fill="#87603d"/><rect x="66" y="61" width="10" height="14" rx="4" fill="#87603d"/><rect x="80" y="58" width="10" height="16" rx="4" fill="#87603d"/><path d="M76 34q4-15 22-14 18 1 18 17 0 13-16 13l-18 2z" fill="#a0714a"/><ellipse cx="84" cy="22" rx="5" ry="3.6" fill="#7a5233"/><circle cx="97" cy="31" r="2.4" fill="#2b1d12"/><ellipse cx="112.5" cy="35" rx="1.9" ry="1.3" fill="#2b1d12"/><path d="M104 43q5 2.5 9 0" stroke="#2b1d12" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="93" cy="14" r="7" fill="#f39a1e"/><path d="M93 7q2-4 5-3" stroke="#3d8b37" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="90.5" cy="11.5" rx="2" ry="1.2" fill="#ffc46b"/></svg>`,
+  heart: (s = 28) => `<svg width="${s}" height="${s}" viewBox="0 0 32 30"><path d="M16 28C-6 13 3-3 16 7 29-3 38 13 16 28Z" fill="#e5487a"/><path d="M9 7.5q-3 1-3.5 4" stroke="#fff" stroke-opacity=".6" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+  sheep: (s = 56) => `<svg width="${s}" height="${Math.round(s * .8)}" viewBox="0 0 100 80"><rect x="36" y="56" width="6" height="18" rx="2.5" fill="#3b3330"/><rect x="58" y="56" width="6" height="18" rx="2.5" fill="#3b3330"/><g fill="#fbf8f2" stroke="#ddd5c6" stroke-width="1.5"><circle cx="30" cy="40" r="13"/><circle cx="44" cy="30" r="15"/><circle cx="60" cy="31" r="14"/><circle cx="40" cy="50" r="13"/><circle cx="58" cy="50" r="13"/><circle cx="68" cy="42" r="11"/></g><ellipse cx="80" cy="40" rx="10" ry="12.5" fill="#3b3330"/><ellipse cx="70" cy="34" rx="6" ry="3" fill="#3b3330" transform="rotate(-25 70 34)"/><circle cx="79" cy="29" r="6.5" fill="#fbf8f2" stroke="#ddd5c6"/><circle cx="84" cy="37" r="1.9" fill="#fff"/><path d="M82 46q3 2 6 0" stroke="#fff" stroke-width="1.3" fill="none" stroke-linecap="round"/><circle cx="73" cy="44" r="2.4" fill="#f4a3b8" opacity=".8"/></svg>`,
+  goat: (s = 60) => `<svg width="${s}" height="${Math.round(s * .82)}" viewBox="0 0 110 90"><rect x="28" y="58" width="6" height="24" rx="2.5" fill="#cbb999"/><rect x="38" y="60" width="6" height="22" rx="2.5" fill="#cbb999"/><rect x="58" y="60" width="6" height="22" rx="2.5" fill="#cbb999"/><rect x="68" y="58" width="6" height="24" rx="2.5" fill="#cbb999"/><g fill="#4a3b2c"><rect x="28" y="79" width="6" height="4" rx="1"/><rect x="38" y="79" width="6" height="4" rx="1"/><rect x="58" y="79" width="6" height="4" rx="1"/><rect x="68" y="79" width="6" height="4" rx="1"/></g><path d="M20 44l-8-7" stroke="#efe4d1" stroke-width="5" stroke-linecap="round"/><ellipse cx="50" cy="50" rx="31" ry="16" fill="#efe4d1"/><path d="M72 44L80 22 92 26 84 50Z" fill="#efe4d1"/><path d="M83 16q-1-10-10-12" stroke="#8c7a60" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M88 15q2-9-4-13" stroke="#8c7a60" stroke-width="3.2" fill="none" stroke-linecap="round"/><ellipse cx="90" cy="25" rx="11" ry="8" fill="#efe4d1" transform="rotate(22 90 25)"/><ellipse cx="79" cy="22" rx="7" ry="2.8" fill="#dccbad" transform="rotate(-25 79 22)"/><circle cx="92" cy="22" r="1.8" fill="#2b2118"/><path d="M96 31l-1 10-5-9z" fill="#cbb999"/><ellipse cx="99" cy="28" rx="1.4" ry="1" fill="#7a5f4a"/></svg>`,
+  truck: (s = 64) => `<svg width="${s}" height="${Math.round(s * .55)}" viewBox="0 0 120 66"><path d="M6 44V30h46V14h26l14 16h20q4 0 4 4v10z" fill="#c2410c"/><rect x="6" y="27" width="46" height="4" fill="#9a3412"/><path d="M58 18h18l10 12H58z" fill="#cfe3f5"/><rect x="66" y="34" width="8" height="2.5" rx="1" fill="#7c2d12"/><rect x="110" y="34" width="6" height="5" rx="1" fill="#fde68a"/><rect x="4" y="42" width="114" height="4" rx="2" fill="#374151"/><circle cx="28" cy="48" r="11" fill="#1f2937"/><circle cx="28" cy="48" r="4.5" fill="#9ca3af"/><circle cx="94" cy="48" r="11" fill="#1f2937"/><circle cx="94" cy="48" r="4.5" fill="#9ca3af"/></svg>`,
+};
+
+/* votes mean the same for everyone; each person's theme just dresses them differently */
+const VOTES = ["love", "like", "hate"];
+const POINTS = {love: 3, like: 1, hate: -3};
+const THEMES = {
+  classic: {
+    name: "🚗 Classic", logo: () => "🚗", title: () => "Car Finder", sub: "", mascots: () => "", addIcon: () => "➕",
+    icon: {love: "❤️", like: "👍", hate: "👎"}, words: {love: "Love", like: "Like", hate: "Hate"},
+    heads: {loved: "❤️ Loved", liked: "👍 Liked", mixed: "🤔 Mixed / not voted yet", hated: "👎 Hated"},
+    tabs: {family: "Family list", picks: "Top picks"},
+    empty: "No votes yet. Use ❤️ 👍 👎 on any car, or add a car you found.", emptyArt: null, loading: "Searching",
+    burst: {love: ["❤️", "💖", "💕", "💗", "🚗", "🚙", "🏎️", "❤️"], like: ["👍", "✨", "🚗"], hate: ["🗑️", "💥", "🚗", "🚧", "💨", "🗑️", "🚙"]},
+  },
+  ballpark: {
+    name: "🥎 Ballpark", logo: () => ART.softball(30), title: w => w ? `${w}'s Car Draft` : "The Family Car Draft",
+    sub: "Batter up! Find the ride, pet the dog, chill like a capybara",
+    mascots: () => ART.softball(30) + ART.dog(34) + ART.capybara(54), addIcon: () => ART.dog(28),
+    icon: {love: "🥎", like: "🐾", hate: "🚫"}, words: {love: "Home run (love)", like: "Good pup (like)", hate: "Strike out (hate)"},
+    heads: {loved: "🥎 Grand slams: loved", liked: "🐾 Good pups: liked", mixed: "🤔 On deck: mixed or no votes yet", hated: "🚫 Struck out: hated"},
+    tabs: {family: "🥎 Family lineup", picks: "⭐ All-star picks"},
+    empty: "The capybara is chilling. No votes yet. Hit 🥎 🐾 or 🚫 on any car, or add one you found.",
+    emptyArt: () => ART.capybara(110), loading: "Warming up in the bullpen",
+    burst: {love: ["❤️", "💖", "🥎", "🐶", "🐾", "🚗", "💕", "🥎"], like: ["🐾", "✨", "🥎"], hate: ["🗑️", "💥", "🚗", "🚫", "💨", "🗑️"]},
+  },
+  farmhouse: {
+    name: "💖 Farmhouse", logo: () => ART.heart(26), title: w => w ? `${w}'s Car Picks` : "The Family Car Picks",
+    sub: "Picked with love, plus a few dogs, goats & sheep",
+    mascots: () => ART.heart(22) + ART.dog(34) + ART.goat(50) + ART.sheep(48), addIcon: () => ART.sheep(36),
+    icon: {love: "💖", like: "🐑", hate: "💔"}, words: {love: "Love it", like: "Like it", hate: "Not for us"},
+    heads: {loved: "💖 Loved", liked: "🐑 Liked", mixed: "🐐 Still grazing: mixed or not voted", hated: "💔 Not for us"},
+    tabs: {family: "💖 Family favorites", picks: "🌷 Top picks"},
+    empty: "Nothing in the pasture yet. Tap 💖 🐑 or 💔 on any car, or add one you found.",
+    emptyArt: () => ART.goat(90) + ART.sheep(86), loading: "Rounding up the herd",
+    burst: {love: ["💖", "💕", "❤️", "🐶", "🐐", "🐑", "🚗", "💗"], like: ["🐑", "✨", "💕"], hate: ["💔", "🗑️", "💥", "🚗", "💨"]},
+  },
+  truckyard: {
+    name: "🛻 Truck Yard", logo: () => ART.truck(40), title: w => w ? `${w}'s Truck Yard` : "The Truck Yard",
+    sub: "Built tough. Priced right. Tire kicking welcome.",
+    mascots: () => ART.truck(64), addIcon: () => ART.truck(40),
+    icon: {love: "🛻", like: "👍", hate: "🗑️"}, words: {love: "Love it", like: "Solid", hate: "Scrap it"},
+    heads: {loved: "🛻 Top of the lot: loved", liked: "👍 Solid haul: liked", mixed: "🔧 In the shop: mixed or not voted", hated: "🗑️ Scrapyard: hated"},
+    tabs: {family: "🛻 Family lot", picks: "🏁 Top picks"},
+    empty: "The lot's empty. Hit 🛻 👍 or 🗑️ on any car, or add one you found.",
+    emptyArt: () => ART.truck(140), loading: "Firing up the engine",
+    burst: {love: ["🛻", "🚚", "❤️", "🏁", "⛽", "🔧", "❤️", "🛻"], like: ["👍", "🔧", "✨"], hate: ["🗑️", "💥", "🛻", "🚧", "💨", "🔩"]},
+  },
+};
+let familyThemes = {};   // name -> theme key, chosen during setup (config.json "family")
+const defaultTheme = n => THEMES[familyThemes[n]] ? familyThemes[n] : "classic";
+const THEME_ART = {ballpark: s => ART.softball(s), farmhouse: s => ART.heart(s), truckyard: s => ART.truck(s)};
+const pcolor = n => `var(--p${Math.max(0, family.indexOf(n)) % 6})`;   // each person keeps their color everywhere
+const initials = n => family.some(o => o !== n && o[0] === n[0]) ? n.slice(0, 2) : n[0];   // two names starting with the same letter show two letters
+
+let meta = null, data = null, votes = {}, family = [];
+let tab = "family", sortKey = null, sortDesc = false, filter = null;
+let who = store.get("carfinder.who", "");
+const theme = () => THEMES[document.documentElement.dataset.theme] || THEMES.classic;
+
+const DEFAULT_META = {
+  bodies: {suv:"SUV / Crossover", sedan:"Sedan", truck:"Pickup Truck", coupe:"Coupe", convertible:"Convertible", hatchback:"Hatchback", minivan:"Minivan", van:"Van", wagon:"Wagon"},
+  sources: {cargurus:"CarGurus", autotrader:"Autotrader", carscom:"Cars.com", carvana:"Carvana"},
+  defaults: {radius: 50, body: "suv", min_tier: 2, max_local: 40, max_online: 15, max_per_model: 4, sources: ["cargurus","autotrader","carscom","carvana"]},
+};
+
+async function api(path, body) {
+  const r = await fetch(path, body ? {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)} : {});
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || r.statusText);
+  return j;
+}
+
+async function init() {
+  meta = DEFAULT_META;
+  if (!STATIC) { try { meta = await api("/api/meta"); } catch {} }
+  if (meta.family) family = meta.family;
+  if (meta.family_themes) familyThemes = meta.family_themes;
+  if (STATIC && window.__PRELOAD__ && window.__PRELOAD__.family) family = window.__PRELOAD__.family;
+  if (STATIC && window.__PRELOAD__ && window.__PRELOAD__.family_themes) familyThemes = window.__PRELOAD__.family_themes;
+  $("#body").innerHTML = Object.entries(meta.bodies).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join("");
+  $("#sources").innerHTML = Object.entries(meta.sources).map(([k, v]) =>
+    `<label><input type="checkbox" name="src" value="${k}"> ${esc(v)}</label>`).join("");
+  fillForm(meta.defaults);
+  $("#themeSel").innerHTML = Object.entries(THEMES).map(([k, t]) => `<option value="${k}">${t.name}</option>`).join("");
+
+  for (const id of ["showOnline", "showPhotos", "useVotes"]) {
+    const el = $("#" + id);
+    el.checked = store.get("carfinder." + id, el.checked);
+    el.addEventListener("change", () => { store.set("carfinder." + id, el.checked); render(); });
+  }
+  $("#quick").addEventListener("input", render);
+  $("#csv").addEventListener("click", exportCsv);
+  $("#clearFilter").addEventListener("click", () => { filter = null; render(); });
+  $("#toggleForm").addEventListener("click", () => { const p = $("#formPanel"); p.hidden = !p.hidden; $("#toggleForm").textContent = p.hidden ? "Edit filters" : "Hide filters"; });
+  $("#whoBtn").addEventListener("click", () => pickWho());
+  $("#themeSel").addEventListener("change", () => { store.set(`carfinder.theme.${who || "anon"}`, $("#themeSel").value); applyTheme(); });
+  document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
+  $("#form").addEventListener("submit", search);
+  $("#body").addEventListener("change", () => { $("#sizeBox").hidden = $("#body").value !== "suv"; });
+  $("#saveProfile").addEventListener("click", saveProfile);
+  $("#saved").addEventListener("change", () => loadSaved($("#saved").value));
+  $("#addBtn").addEventListener("click", openAdd);
+  $("#addCancel").addEventListener("click", () => $("#addDlg").close());
+  $("#lookupBtn").addEventListener("click", () => lookupLink(true));
+  const urlBox = $("#addForm").elements.namedItem("url");
+  urlBox.addEventListener("paste", () => setTimeout(() => lookupLink(), 0));   // fetch as soon as a link is pasted
+  urlBox.addEventListener("input", () => { clearTimeout(lookupTimer); lookupTimer = setTimeout(() => lookupLink(), 700); });   // or typed
+  $("#addForm").addEventListener("submit", saveAdd);
+  setupPhoto();
+  const asked = new URLSearchParams(location.search).get("who");   // bookmarkable: /?who=Sam
+  if (asked && family.includes(asked)) setWho(asked, true); else setWho(who, false);
+  if (!who && !STATIC) pickWho();   // first visit on this device: land on "who's shopping?"
+  narrow.addEventListener("change", render);
+
+  if (STATIC) {
+    $("#staticBanner").hidden = false;
+    for (const id of ["go", "saveProfile", "addBtn"]) $("#" + id).disabled = true;
+    $("#saved").style.display = $("#whoBtn").style.display = "none";
+    if (window.__PRELOAD__) { votes = window.__PRELOAD__.votes || {}; setData(window.__PRELOAD__); }
+    return;
+  }
+  try { votes = await api("/api/votes"); } catch {}
+  const names = await refreshSaved();
+  if (names.length) await loadSaved(names[0]);   // everyone opens to the latest family search
+  else { $("#formPanel").hidden = false; render(); }
+  setInterval(async () => { try { votes = await api("/api/votes"); render(); } catch {} }, 20000);
+}
+
+/* ---------- who's viewing + theme ---------- */
+const TAGLINE = {ballpark: "Softball, dogs & capybaras edition", farmhouse: "Hearts, dogs, goats & sheep edition", truckyard: "Truck yard edition"};
+
+function pickWho() {
+  $("#landingArt").innerHTML = `${ART.truck(70)}${ART.heart(30)}${ART.sheep(52)}${ART.goat(54)}${ART.softball(40)}${ART.dog(46)}${ART.capybara(70)}`;
+  $("#whoPick").innerHTML = family.map(n => `<button type="button" data-who="${esc(n)}" class="${defaultTheme(n)}" style="--pc:${pcolor(n)}">
+      ${THEME_ART[defaultTheme(n)] ? THEME_ART[defaultTheme(n)](64) : `<span class="init">${esc(n[0])}</span>`}
+      <span>${esc(n)}${n === who ? ` <span class="last">· current</span>` : ""}<br><span class="tag">${esc(TAGLINE[defaultTheme(n)] || "Tap to vote on cars")}</span></span></button>`).join("");
+  $("#whoPick").querySelectorAll("[data-who]").forEach(b => b.addEventListener("click", () => {
+    store.set(`carfinder.theme.${b.dataset.who}`, null);   // choosing your name puts you back in your own theme
+    setWho(b.dataset.who, true);
+    $("#landing").hidden = true;
+    document.body.classList.remove("locked");
+  }));
+  $("#landing").hidden = false;
+  document.body.classList.add("locked");
+  $("#whoPick button").focus();
+}
+
+function setWho(n, save) {
+  who = family.includes(n) ? n : "";
+  if (save) store.set("carfinder.who", who);
+  $("#whoName").textContent = who || "pick your name";
+  applyTheme();
+}
+
+function applyTheme() {
+  const saved = store.get(`carfinder.theme.${who || "anon"}`, null);
+  const key = THEMES[saved] ? saved : defaultTheme(who);
+  document.documentElement.dataset.theme = key;
+  const t = THEMES[key];
+  $("#themeSel").value = key;
+  $("#logo").innerHTML = t.logo();
+  $("#titleText").textContent = t.title(who);
+  $("#subtitle").hidden = !t.sub;
+  $("#subtitle").textContent = t.sub;
+  $("#mascots").innerHTML = t.mascots();
+  document.querySelector('[data-label="family"]').textContent = t.tabs.family;
+  document.querySelector('[data-label="picks"]').textContent = t.tabs.picks;
+  $("#addIcon").innerHTML = t.addIcon();
+  $("#legend").innerHTML = VOTES.map(v => `<span>${t.icon[v]} ${t.words[v]}</span>`).join("");
+  render();
+}
+
+/* ---------- search / saved ---------- */
+function setTab(t) {
+  tab = t; sortKey = null;
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x.dataset.tab === t));
+  render();
+}
+
+function formValues() {
+  const f = $("#form");
+  const v = {};
+  for (const k of ["zip", "radius", "body", "max_price", "max_miles", "min_year", "keywords", "min_tier", "max_local", "max_online", "max_per_model"]) v[k] = f[k].value.trim();
+  v.sources = [...f.querySelectorAll("[name=src]:checked")].map(c => c.value);
+  v.sizes = [...f.querySelectorAll("[name=size]:checked")].map(c => c.value);
+  if (v.sizes.length === 4) v.sizes = [];   // all four ticked = no size filter
+  return v;
+}
+
+function fillForm(d) {
+  const f = $("#form");
+  for (const k of ["zip", "radius", "body", "max_price", "max_miles", "min_year", "min_tier", "max_local", "max_online", "max_per_model"]) {
+    if (f[k]) f[k].value = d[k] ?? "";
+  }
+  f.keywords.value = [].concat(d.keywords || []).join(", ");
+  if (d.sources) f.querySelectorAll("[name=src]").forEach(c => c.checked = d.sources.includes(c.value));
+  const sizes = d.sizes && d.sizes.length ? d.sizes : ["subcompact", "compact", "midsize", "fullsize"];
+  f.querySelectorAll("[name=size]").forEach(c => c.checked = sizes.includes(c.value));
+  $("#sizeBox").hidden = f.body.value !== "suv";
+  summarize(d);
+}
+
+function summarize(d) {
+  const SIZE = {subcompact: "subcompact", compact: "compact", midsize: "midsize", fullsize: "full-size"};
+  const parts = [d.body === "suv" && d.sizes && d.sizes.length ? `SUV (${d.sizes.map(x => SIZE[x]).join(" / ")})` : (meta.bodies[d.body] || d.body)];
+  if (d.keywords && d.keywords.length) parts.push([].concat(d.keywords).join(" / "));
+  if (d.max_price) parts.push(`under ${money(d.max_price)}`);
+  if (d.max_miles) parts.push(`under ${num(d.max_miles)} mi`);
+  if (d.min_year) parts.push(`${d.min_year}+`);
+  parts.push(`within ${d.radius} mi of ${d.zip || "?"}`);
+  $("#summary").textContent = parts.join(" · ");
+}
+
+async function search(e) {
+  e.preventDefault();
+  const body = formValues();
+  if (!/^\d{5}$/.test(body.zip)) return setStatus(`<span class="chip err">Enter a 5-digit ZIP code</span>`);
+  if (!body.sources.length) return setStatus(`<span class="chip err">Pick at least one site</span>`);
+  $("#go").disabled = true;
+  const t0 = Date.now();
+  const tick = setInterval(() => setStatus(`<span class="spinner"></span> ${theme().loading} ${body.sources.length} sites… ${Math.round((Date.now() - t0) / 1000)}s`), 500);
+  try {
+    const j = await api("/api/search", body);
+    filter = null;
+    setData(j);
+    refreshSaved();
+    $("#formPanel").hidden = true; $("#toggleForm").textContent = "Edit filters";
+    if (tab === "family") setTab("picks");
+  } catch (err) {
+    setStatus(`<span class="chip err">Search failed: ${esc(err.message)}</span>`);
+  } finally {
+    clearInterval(tick);
+    $("#go").disabled = false;
+  }
+}
+
+async function saveProfile() {
+  try {
+    const p = await api("/api/profile", formValues());
+    meta.defaults = p;
+    summarize(p);
+    setStatus(`<span class="chip">Saved as the family filters. Press Search to refresh results for everyone.</span>`);
+  } catch (err) { setStatus(`<span class="chip err">Couldn't save: ${esc(err.message)}</span>`); }
+}
+
+async function refreshSaved() {
+  try {
+    const names = await api("/api/saved");
+    $("#saved").innerHTML = `<option value="">Past searches</option>` + names.map(n => {
+      const m = n.match(/^(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})\d{2}_(\w+)_(\d+)/);
+      const label = m ? `${m[2]}/${m[3]} ${m[4]}:${m[5]} · ${m[6]} · ${m[7]}` : n;
+      return `<option value="${esc(n)}">${esc(label)}</option>`;
+    }).join("");
+    return names;
+  } catch { return []; }
+}
+
+async function loadSaved(name) {
+  if (!name) return;
+  filter = null;
+  setData(await api("/api/saved/" + encodeURIComponent(name)));
+}
+
+function setData(j) {
+  data = j;
+  fillForm(j.params);
+  const chips = Object.values(j.sources).map(s => s.error
+    ? `<span class="chip err" title="${esc(s.error)}">${esc(s.name)}: ${esc(s.error.slice(0, 60))}</span>`
+    : `<span class="chip">${esc(s.name)}: ${s.count}</span>`).join("");
+  const c = j.counts;
+  setStatus(`${chips} <span>· searched ${new Date(j.generated).toLocaleString()} · ${c.local ?? "?"} local + ${c.online ?? "?"} online matches</span>`);
+  render();
+}
+
+function setStatus(html) { $("#status").innerHTML = html; }
+
+/* ---------- family ranking ---------- */
+const modelKey = l => `${l.make} ${l.model}`.trim();
+const modelId = l => modelKey(l).toLowerCase();
+
+/* family votes steer the ranking by model: every vote on any car of a model counts for all cars of that model.
+   net points < 0 -> the whole model sinks below every other car (keeping its own value order);
+   net points > 0 -> a small nudge up (each point is worth 2% of price-vs-market), so a liked model doesn't swamp a much better deal */
+const SINK = 10, BOOST_PER_POINT = 0.02;
+let signals = new Map();
+
+function modelSignals() {
+  const m = new Map();
+  for (const e of Object.values(votes)) {
+    const id = modelId(e.listing || {});
+    if (!id) continue;
+    const sig = m.get(id) || {label: modelKey(e.listing), points: 0, votes: []};
+    for (const [n, v] of Object.entries(e.votes || {})) { sig.points += POINTS[v] || 0; sig.votes.push([n, v]); }
+    m.set(id, sig);
+  }
+  return m;
+}
+
+function rerank() {
+  buildAliases();
+  signals = modelSignals();
+  if (!data) return;
+  const steer = $("#useVotes").checked;
+  for (const l of data.listings) {
+    const pts = (signals.get(modelId(l)) || {}).points || 0;
+    l._model_pts = steer ? pts : 0;
+    l._adj = (l.score ?? 0) + (l._model_pts < 0 ? SINK : -BOOST_PER_POINT * l._model_pts);
+    l._top = false;
+  }
+  // same rules as the server's top picks (cap per channel, cap per model), on the vote-adjusted order
+  const P = data.params || {};
+  for (const [channel, cap] of [["local", P.max_local ?? 40], ["online", P.max_online ?? 15]]) {
+    const perModel = new Map();
+    let picked = 0;
+    for (const l of data.listings.filter(x => x.channel === channel).sort((a, b) => a._adj - b._adj)) {
+      if (cap && picked >= cap) break;
+      const id = modelId(l);
+      if (P.max_per_model && (perModel.get(id) || 0) >= P.max_per_model) continue;
+      perModel.set(id, (perModel.get(id) || 0) + 1);
+      picked++;
+      l._top = true;
+    }
+  }
+}
+
+function renderSteer() {
+  const box = $("#steer");
+  const inSearch = new Set((data ? data.listings : []).map(modelId));
+  const moved = [...signals.entries()].filter(([id, s]) => s.points !== 0 && inSearch.has(id))
+    .sort((a, b) => a[1].points - b[1].points);
+  if (!moved.length || !["picks", "all"].includes(tab)) { box.hidden = true; return; }
+  const t = theme(), off = !$("#useVotes").checked;
+  box.hidden = false;
+  box.innerHTML = `<span>${off ? "Family votes would move:" : "Ranking moved by family votes:"}</span>` + moved.map(([, s]) => {
+    const who = s.votes.map(([n, v]) => `${n} ${t.icon[v]}`).join(", ");
+    return `<span class="chip ${s.points < 0 ? "sunk" : "boost"}" title="${esc(s.label)}: ${s.points > 0 ? "+" : ""}${s.points} family points">${s.points < 0 ? "⬇" : "⬆"} ${esc(s.label)} <span class="sub">(${esc(who)})</span></span>`;
+  }).join("");
+}
+
+const steerBadge = l => l._model_pts < 0 ? `<span class="badge sunk" title="Someone in the family voted this model down, so every one of them ranks last">⬇ model voted down</span> `
+  : l._model_pts > 0 ? `<span class="badge boost" title="The family likes this model, so they rank a little higher">⬆ family likes this model</span> ` : "";
+/* A car keeps its votes across searches even when its link changes (say another site becomes the cheapest copy):
+   match the new listing to the saved vote by link, by any of its other site links, or by VIN. */
+let voteAlias = new Map();   // listing url in the current search -> url its votes are stored under
+
+function buildAliases() {
+  voteAlias = new Map();
+  if (!data) return;
+  const byVin = new Map();
+  for (const [url, e] of Object.entries(votes)) {
+    const vin = ((e.listing && e.listing.vin) || "").toUpperCase();
+    if (vin.length === 17) byVin.set(vin, url);
+  }
+  for (const l of data.listings) {
+    if (votes[l.url]) continue;
+    const key = (l.also_on || []).map(x => x.url).find(u => votes[u]) || byVin.get((l.vin || "").toUpperCase());
+    if (key) voteAlias.set(l.url, key);
+  }
+}
+const voteKey = url => voteAlias.get(url) || url;
+const votesFor = url => (votes[voteKey(url)] && votes[voteKey(url)].votes) || {};
+const pointsFor = url => Object.values(votesFor(url)).reduce((s, v) => s + (POINTS[v] || 0), 0);
+
+function band(row) {
+  const p = row._points, vs = Object.values(row._votes);
+  if (!vs.length) return "mixed";
+  if (p >= 3) return "loved";
+  if (p >= 1) return "liked";
+  if (p < 0) return "hated";
+  return "mixed";
+}
+
+function familyRows() {
+  // prefer the fresh copy from the current search (today's price, market estimate), matched by link or VIN; else the saved snapshot
+  const fresh = new Map();
+  for (const l of (data ? data.listings : [])) fresh.set(voteKey(l.url), l);
+  return Object.entries(votes).map(([url, e]) => {
+    const now = fresh.get(url), then = e.listing || {};
+    return {
+      ...(now || then), _votes: e.votes || {}, _points: pointsFor(url),
+      _manual: !!e.manual, _added_by: e.added_by || "", _note: e.note || "", _stale: !now && !e.manual,
+      _was: now && then.price && now.price && now.price !== then.price ? then.price : null,   // price when first voted on
+    };
+  }).sort((a, b) => (b._points - a._points) || ((a.price ?? 1e12) - (b.price ?? 1e12)));
+}
+
+/* ---------- rendering ---------- */
+function visible(list) {
+  const q = $("#quick").value.trim().toLowerCase();
+  const online = $("#showOnline").checked;
+  return list.filter(l => {
+    if (!online && l.channel === "online") return false;
+    if (filter && !filter.test(l)) return false;
+    if (q && !`${l.year} ${l.make} ${l.model} ${l.trim} ${l.dealer} ${l.city} ${l.group}`.toLowerCase().includes(q)) return false;
+    return true;
+  });
+}
+
+function sortRows(rows, key, desc) {
+  const dir = desc ? -1 : 1;
+  return rows.sort((a, b) => {
+    const x = a[key], y = b[key];
+    if (x == null || x === "") return 1;
+    if (y == null || y === "") return -1;
+    if (typeof x === "string") return x.localeCompare(y) * dir;
+    return (x - y) * dir;
+  });
+}
+
+function th(key, label, cls = "") {
+  const on = sortKey === key;
+  return `<th class="${cls} ${on ? "sorted" : ""} ${on && sortDesc ? "desc" : ""}" data-sort="${key}">${label}</th>`;
+}
+
+function render() {
+  if (!meta) return;
+  rerank();
+  renderSteer();
+  if ($("#photoDlg").open) refreshPhotoInfo();
+  const all = data ? data.listings : [];
+  const fam = familyRows();
+  $("#nFamily").textContent = `(${fam.length})`;
+  $("#nPicks").textContent = data ? `(${visible(all.filter(l => l._top)).length})` : "";
+  $("#nAll").textContent = data ? `(${visible(all).length})` : "";
+  $("#nDealers").textContent = data ? `(${dealers(all).length})` : "";
+  $("#nModels").textContent = data ? `(${models(visible(all)).length})` : "";
+  const cf = $("#clearFilter");
+  cf.hidden = !filter;
+  cf.querySelector("span").textContent = filter ? filter.label : "";
+  if (tab === "family") return renderFamily(visible(fam));
+  if (!data) { $("#view").innerHTML = emptyState("No searches yet. Set the filters and press Search."); return; }
+  if (tab === "dealers") return renderDealers(dealers(all));
+  if (tab === "models") return renderModels(models(visible(all)));
+  renderCars(visible(tab === "picks" ? all.filter(l => l._top) : all), {picks: tab === "picks"});
+}
+
+function emptyState(text) {
+  return `<div class="empty">${theme().emptyArt ? theme().emptyArt() : ""}${esc(text)}</div>`;
+}
+
+function diffBadge(l) {
+  if (l.price_diff == null) return `<span class="badge unknown" title="Not enough similar cars to estimate">n/a</span>`;
+  const rough = (l.market_src || "").startsWith("Rough");
+  const title = esc(`Est. market ${money(l.market_value)} (${l.market_src})`);
+  const pct = Math.abs(l.price_diff) / l.market_value;
+  const amt = `${rough ? "~" : ""}${money(Math.abs(l.price_diff))}`;
+  const cls = rough ? " rough" : "";
+  if (pct < 0.02) return `<span class="badge even${cls}" title="${title}">≈ market</span>`;
+  return l.price_diff < 0
+    ? `<span class="badge below${cls}" title="${title}">${amt} below</span>`
+    : `<span class="badge above${cls}" title="${title}">${amt} above</span>`;
+}
+
+const SIZE_LABEL = {subcompact: "Subcompact", compact: "Compact", midsize: "Midsize", fullsize: "Full-size"};
+const sizeBadge = l => l.size ? `<span class="badge size">${SIZE_LABEL[l.size]}</span> ` : "";
+
+function whereBadge(l) {
+  if (l.channel === "online") return `<span class="badge where-online" title="Delivered to you; no test drive before you buy. Check the seller's return window.">🚚 Online · delivered</span>`;
+  return `<span class="badge where-local" title="Dealer lot you can visit and test-drive">📍 ${l.distance != null ? Number(l.distance).toFixed(0) + " mi" : "local"}</span>${l.city ? `<div class="sub">${esc(l.city)}</div>` : ""}`;
+}
+
+function voteCell(l) {
+  const vs = votesFor(l.url);
+  return `<div class="votes">` + family.map(n => {
+    if (n === who && !STATIC) {
+      return `<span class="mine" style="--pc:${pcolor(n)}" title="Your vote, ${esc(n)}">` + VOTES.map(v =>
+        `<button class="vb ${vs[n] === v ? "on" : ""}" data-vote="${v}" data-url="${esc(l.url)}" title="${theme().words[v]}">${theme().icon[v]}</button>`).join("") + `</span>`;
+    }
+    const v = vs[n];
+    return `<span class="pv ${v ? "" : "none"}" style="--pc:${pcolor(n)}" title="${esc(n)}: ${v ? theme().words[v] : "no vote yet"}"><span class="init">${esc(initials(n))}</span>${v ? theme().icon[v] : "·"}</span>`;
+  }).join("") + `</div>`;
+}
+
+function links(l) {
+  return [{source: l.source, url: l.url}, ...(l.also_on || [])]
+    .map(s => `<a class="view" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.source || "Listing")} ↗</a>`).join("");
+}
+
+function carCells(l, photos) {
+  return `${photos ? `<td>${l.image ? `<button type="button" class="thumb-btn" data-photo="${esc(l.url)}" title="See the photo"><img class="thumb" loading="lazy" referrerpolicy="no-referrer" src="${esc(l.image)}" alt=""></button>` : ""}</td>` : ""}
+    <td class="num">${esc(l.year)}</td>
+    <td>${esc(l.make)}</td>
+    <td class="model"><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.model || l.title || "Listing")}</a><div class="sub">${sizeBadge(l)}${steerBadge(l)}${esc(l.trim)}${l.certified ? ` <span class="badge cpo">CPO</span>` : ""}</div></td>
+    <td class="num">${num(l.mileage)}</td>
+    <td class="num"><b>${money(l.price)}</b></td>
+    <td>${diffBadge(l)}</td>
+    <td>${whereBadge(l)}</td>
+    <td class="dealer">${esc(l.dealer)}<div class="sub">${esc(l.group || l.tier_label)}</div></td>`;
+}
+
+const CAR_HEAD = photos => `${photos ? `<th class="nosort"></th>` : ""}
+  ${th("year", "Year", "num")}${th("make", "Make")}${th("model", "Model")}${th("mileage", "Mileage", "num")}${th("price", "Price", "num")}
+  ${th("price_diff", "Est. vs market")}${th("distance", "Where")}${th("dealer", "Dealer")}`;
+
+const narrow = matchMedia("(max-width: 760px)");
+
+function setView(html, cards) {
+  const v = $("#view");
+  v.className = cards ? "cardwrap" : "tablewrap";
+  v.innerHTML = html;
+  bindTable();
+}
+
+function carCard(l, o = {}) {
+  const photo = $("#showPhotos").checked && l.image;
+  const where = l.channel === "online"
+    ? `<span class="badge where-online">🚚 Online · delivered</span>`
+    : `<span class="badge where-local">📍 ${l.distance != null ? Number(l.distance).toFixed(0) + " mi" : "local"}</span>${l.city ? ` <span class="sub">${esc(l.city)}</span>` : ""}`;
+  return `<article class="card ${o.hated ? "hated" : ""} ${photo ? "" : "noimg"}" data-card="${esc(l.url)}">
+    ${photo ? `<button type="button" class="ph thumb-btn" data-photo="${esc(l.url)}" title="See the photo"><img loading="lazy" referrerpolicy="no-referrer" src="${esc(l.image)}" alt=""></button>` : ""}
+    <div>
+      <div class="ttl">${o.rank ? `<span class="rank">${o.rank}.</span>` : ""}<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.year)} ${esc(l.make)} ${esc(l.model || l.title || "Listing")}</a></div>
+      ${l.trim || l.certified || l.size ? `<div class="sub">${sizeBadge(l)}${steerBadge(l)}${esc(l.trim)}${l.certified ? ` <span class="badge cpo">CPO</span>` : ""}</div>` : ""}
+      <div class="price-line"><span class="price">${money(l.price)}</span>${diffBadge(l)}</div>
+      <div class="meta"><span>${num(l.mileage)} mi</span>${where}</div>
+      <div class="sub">${esc(l.dealer)}${l.group ? " · " + esc(l.group) : ""}</div>
+      ${o.extra || ""}
+    </div>
+    <div class="foot">${voteCell(l)}<span class="links">${o.points != null ? `<b class="points">${o.points > 0 ? "+" : ""}${o.points} pts</b>&nbsp;` : ""}${links(l)}${o.remove || ""}</span></div>
+  </article>`;
+}
+
+function channelHead(channel, list, opts) {
+  const c = data ? data.counts : {};
+  const total = channel === "local" ? c.local : c.online;
+  const count = opts.picks && total != null ? `best ${list.length} of ${total} matches` : `${list.length} cars`;
+  return channel === "local"
+    ? {cls: "local", title: "📍 Go see &amp; drive: local dealers", sub: `${count} · visit and test-drive before you buy`}
+    : {cls: "online", title: "🚚 Online sellers: delivered to you", sub: `${count} · no test drive before purchase; check the return window`};
+}
+
+function renderCars(rows, opts) {
+  if (!rows.length) { $("#view").className = "tablewrap"; $("#view").innerHTML = emptyState("No cars match. Try loosening the filters."); return; }
+  const photos = $("#showPhotos").checked;
+  const sorted = list => sortKey ? sortRows(list, sortKey, sortDesc) : list.sort((a, b) => (a._adj ?? a.score ?? 0) - (b._adj ?? b.score ?? 0));
+  const groups = [["local", rows.filter(l => l.channel !== "online")], ["online", rows.filter(l => l.channel === "online")]].filter(g => g[1].length);
+  if (narrow.matches) {
+    return setView(groups.map(([ch, list]) => {
+      const h = channelHead(ch, list, opts);
+      return `<div class="card-section"><span class="section-title ${h.cls}">${h.title}</span><div class="sub">${h.sub}</div></div>` +
+        sorted(list).map(l => carCard(l, {hated: pointsFor(l.url) < 0})).join("");
+    }).join(""), true);
+  }
+  const cols = 11 + (photos ? 1 : 0);
+  const body = groups.map(([ch, list]) => {
+    const h = channelHead(ch, list, opts);
+    return `<tr class="section"><td colspan="${cols}"><span class="section-title ${h.cls}">${h.title}</span> <span class="sub">· ${h.sub}</span></td></tr>` +
+      sorted(list).map(l => `<tr class="${pointsFor(l.url) < 0 ? "hated" : ""}" data-card="${esc(l.url)}">${carCells(l, photos)}<td>${voteCell(l)}</td><td>${links(l)}</td></tr>`).join("");
+  }).join("");
+  setView(`<table><thead><tr>${CAR_HEAD(photos)}<th class="nosort">Family</th><th class="nosort">View listing</th></tr></thead><tbody>${body}</tbody></table>`, false);
+}
+
+function renderFamily(rows) {
+  if (!rows.length) {
+    $("#view").className = "tablewrap";
+    $("#view").innerHTML = emptyState(theme().empty);
+    return;
+  }
+  const photos = $("#showPhotos").checked;
+  const cols = 13 + (photos ? 1 : 0);
+  const heads = theme().heads;
+  const list = sortKey ? sortRows([...rows], sortKey, sortDesc) : rows;
+  const cards = narrow.matches;
+  let html = "", last = null, rank = 0;
+  for (const l of list) {
+    const b = band(l);
+    if (!sortKey && b !== last) {
+      html += cards ? `<div class="card-section"><span class="section-title ${b}">${heads[b]}</span></div>`
+                    : `<tr class="section"><td colspan="${cols}"><span class="section-title ${b}">${heads[b]}</span></td></tr>`;
+      last = b;
+    }
+    rank++;
+    const tag = l._manual ? `<span class="badge manual">➕ added by ${esc(l._added_by)}</span>` : (l._stale ? `<span class="badge unknown" title="This car wasn't in the latest search: it may have sold, or its price went over the family filters">not in latest search: may be sold</span>` : "");
+    const priceMove = l._was ? ` <span class="badge ${l.price < l._was ? "below" : "above"}" title="Price when the family first voted on it">💲 was ${money(l._was)}</span>` : "";
+    const note = `${tag}${priceMove}${l._note ? `<div>${esc(l._note)}</div>` : ""}`;
+    const remove = l._manual ? ` <button class="ghost" data-remove="${esc(l.url)}" title="Remove this added car" style="padding:2px 8px">✕</button>` : "";
+    html += cards
+      ? carCard(l, {rank, hated: b === "hated", points: l._points, extra: note ? `<div class="sub" style="margin-top:4px">${note}</div>` : "", remove})
+      : `<tr class="${b === "hated" ? "hated" : ""}" data-card="${esc(l.url)}">
+      <td class="rank">${rank}</td>
+      ${carCells(l, photos)}
+      <td>${voteCell(l)}</td>
+      <td class="num points">${l._points > 0 ? "+" : ""}${l._points}</td>
+      <td class="note">${note}</td>
+      <td>${links(l)}${remove}</td></tr>`;
+  }
+  setView(cards ? html : `<table><thead><tr><th class="nosort">#</th>${CAR_HEAD(photos)}<th class="nosort">Family</th>${th("_points", "Points", "num")}<th class="nosort">Notes</th><th class="nosort">View listing</th></tr></thead><tbody>${html}</tbody></table>`, cards);
+}
+
+function dealers(listings) {
+  const m = new Map();
+  for (const l of listings) {
+    if (l.channel !== "local") continue;
+    const d = m.get(l.dealer) || {dealer: l.dealer, group: l.group, tier_label: l.tier_label, city: l.city, distance: l.distance, count: 0, picks: 0, min: Infinity, max: 0, below: 0, voted: 0};
+    d.count++; d.picks += l._top ? 1 : 0;
+    d.min = Math.min(d.min, l.price); d.max = Math.max(d.max, l.price);
+    if (l.price_diff != null && l.price_diff < 0) d.below++;
+    if (pointsFor(l.url) > 0) d.voted++;
+    d.city = d.city || l.city;
+    if (l.distance != null) d.distance = Math.min(d.distance ?? Infinity, l.distance);
+    m.set(l.dealer, d);
+  }
+  return [...m.values()];
+}
+
+function renderDealers(list) {
+  if (!list.length) { $("#view").innerHTML = emptyState("No local dealers in this search."); return; }
+  const key = sortKey || "count", desc = sortKey ? sortDesc : true;
+  $("#view").innerHTML = `<table><thead><tr>${th("dealer", "Dealer")}${th("group", "Group")}${th("distance", "Distance", "num")}${th("city", "Town")}
+      ${th("count", "Matching cars", "num")}${th("picks", "Top picks", "num")}${th("below", "Below market", "num")}${th("voted", "Family likes", "num")}${th("min", "Price range", "num")}</tr></thead><tbody>
+      ${sortRows(list, key, desc).map(d => `<tr class="clickable" data-dealer="${esc(d.dealer)}">
+        <td class="model"><a href="#">${esc(d.dealer)}</a></td><td>${esc(d.group || d.tier_label)}</td>
+        <td class="num">${d.distance != null ? d.distance.toFixed(0) + " mi" : ""}</td><td>${esc(d.city)}</td>
+        <td class="num">${d.count}</td><td class="num">${d.picks || ""}</td><td class="num">${d.below || ""}</td><td class="num">${d.voted || ""}</td>
+        <td class="num">${money(d.min)}–${money(d.max)}</td></tr>`).join("")}</tbody></table>`;
+  bindTable();
+  document.querySelectorAll("[data-dealer]").forEach(r => r.addEventListener("click", e => {
+    e.preventDefault();
+    const name = r.dataset.dealer;
+    filter = {label: name, test: l => l.dealer === name};
+    setTab("all");
+  }));
+}
+
+function models(listings) {
+  const m = new Map();
+  for (const l of listings) {
+    const k = modelKey(l);
+    if (!m.has(k)) m.set(k, []);
+    m.get(k).push(l);
+  }
+  return [...m.entries()].map(([k, ls]) => {
+    const prices = ls.map(l => l.price).sort((a, b) => a - b);
+    const miles = ls.map(l => l.mileage).filter(x => x != null);
+    const years = ls.map(l => l.year).filter(Boolean);
+    return {
+      model: k, count: ls.length, local: ls.filter(l => l.channel === "local").length, online: ls.filter(l => l.channel === "online").length,
+      min_price: prices[0], median_price: prices[Math.floor(prices.length / 2)],
+      avg_miles: miles.length ? miles.reduce((a, b) => a + b, 0) / miles.length : null,
+      years: years.length ? `${Math.min(...years)}–${Math.max(...years)}` : "", year_max: Math.max(0, ...years),
+      fam: (signals.get(k.toLowerCase()) || {}).points || 0,
+    };
+  });
+}
+
+function renderModels(list) {
+  if (!list.length) { $("#view").innerHTML = emptyState("No models."); return; }
+  const key = sortKey || "count", desc = sortKey ? sortDesc : true;
+  $("#view").innerHTML = `<table><thead><tr>${th("model", "Make &amp; model")}${th("local", "📍 Local", "num")}${th("online", "🚚 Online", "num")}
+      ${th("min_price", "From", "num")}${th("median_price", "Median price", "num")}${th("avg_miles", "Avg miles", "num")}${th("year_max", "Years")}${th("fam", "Family points", "num")}</tr></thead><tbody>
+      ${sortRows(list, key, desc).map(m => `<tr class="clickable" data-model="${esc(m.model)}">
+        <td class="model"><a href="#">${esc(m.model)}</a></td><td class="num">${m.local || ""}</td><td class="num">${m.online || ""}</td>
+        <td class="num">${money(m.min_price)}</td><td class="num">${money(m.median_price)}</td>
+        <td class="num">${num(m.avg_miles)}</td><td>${esc(m.years)}</td><td class="num">${m.fam ? (m.fam > 0 ? "+" : "") + m.fam : ""}</td></tr>`).join("")}</tbody></table>`;
+  bindTable();
+  document.querySelectorAll("[data-model]").forEach(r => r.addEventListener("click", e => {
+    e.preventDefault();
+    const name = r.dataset.model;
+    filter = {label: name, test: l => modelKey(l).toLowerCase() === name.toLowerCase()};
+    setTab("all");
+  }));
+}
+
+/* ---------- voting ---------- */
+async function castVote(url, v, el) {
+  if (STATIC) return;
+  if (!who) return pickWho();
+  const key = voteKey(url);   // keep adding to the car's existing vote record, even if its link changed
+  const current = votesFor(url)[who];
+  const found = (data && data.listings.find(l => l.url === url)) || (votes[key] && votes[key].listing);
+  const listing = found && {...found, url: key};
+  if (!listing) return;
+  if (current !== v) {   // a new reaction (not an undo) gets the celebration
+    el && el.classList.add("pop");
+    flurry(v, el && el.getBoundingClientRect(), el && el.closest("[data-card]"));
+  }
+  try { votes = await api("/api/vote", {listing, who, vote: current === v ? null : v}); render(); }
+  catch (err) { setStatus(`<span class="chip err">Vote failed: ${esc(err.message)}</span>`); }
+}
+
+async function removeEntry(url) {
+  if (!confirm("Remove this added car from the family list for everyone?")) return;
+  try { votes = await api("/api/remove", {url, who}); render(); }
+  catch (err) { setStatus(`<span class="chip err">${esc(err.message)}</span>`); }
+}
+
+function bindTable() {
+  document.querySelectorAll("th[data-sort]").forEach(h => h.addEventListener("click", () => {
+    const k = h.dataset.sort;
+    sortDesc = sortKey === k ? !sortDesc : ["count", "local", "online", "picks", "below", "voted", "fam", "_points", "year_max", "year"].includes(k);
+    sortKey = k;
+    render();
+  }));
+  document.querySelectorAll("[data-vote]").forEach(b => b.addEventListener("click", () => castVote(b.dataset.url, b.dataset.vote, b)));
+  document.querySelectorAll("[data-remove]").forEach(b => b.addEventListener("click", () => removeEntry(b.dataset.remove)));
+}
+
+/* Open a listing exactly like clicking a link with target=_blank: a new tab, not a pop-up window
+   (window.open with "noopener" opens a separate window in some browsers). */
+function openInNewTab(url) {
+  const a = document.createElement("a");
+  a.href = url;
+  a.target = "_blank";
+  a.rel = "noopener";
+  document.body.append(a);
+  a.click();
+  a.remove();
+}
+
+// safety net: any link to another website opens in a new tab, even if a target was missed somewhere
+document.addEventListener("click", e => {
+  const a = e.target.closest && e.target.closest("a[href^='http']");
+  if (a && a.origin !== location.origin && a.target !== "_blank") { a.target = "_blank"; a.rel = "noopener"; }
+}, true);
+
+/* ---------- photo preview ---------- */
+let photoList = [], photoIdx = 0;
+
+function listingByUrl(url) {
+  return (data && data.listings.find(l => l.url === url)) || (votes[url] && votes[url].listing) || null;
+}
+
+function openPhoto(url) {
+  // browse in the order the cars are shown right now
+  photoList = [...new Set([...document.querySelectorAll("#view [data-photo]")].map(b => b.dataset.photo))];
+  photoIdx = Math.max(0, photoList.indexOf(url));
+  showPhoto();
+  if (!$("#photoDlg").open) $("#photoDlg").showModal();
+}
+
+function showPhoto() {
+  const l = listingByUrl(photoList[photoIdx]);
+  if (!l) return;
+  const img = $("#photoImg");
+  img.hidden = !l.image;
+  $("#photoNone").hidden = !!l.image;
+  if (l.image) { img.src = l.image; img.alt = `${l.year} ${l.make} ${l.model}`; }
+  $("#photoCount").textContent = photoList.length > 1 ? `${photoIdx + 1} of ${photoList.length}` : "";
+  $("#photoPrev").hidden = $("#photoNext").hidden = photoList.length < 2;
+  renderPhotoInfo(l);
+}
+
+function stepPhoto(d) {
+  if (photoList.length < 2) return;
+  photoIdx = (photoIdx + d + photoList.length) % photoList.length;
+  showPhoto();
+}
+
+function refreshPhotoInfo() {
+  const l = listingByUrl(photoList[photoIdx]);
+  if (l) renderPhotoInfo(l);
+}
+
+function renderPhotoInfo(l) {
+  const sources = [{source: l.source, url: l.url}, ...(l.also_on || [])];
+  $("#photoInfo").innerHTML = `
+    <div class="ttl">${esc(l.year)} ${esc(l.make)} ${esc(l.model)} <span class="sub">${sizeBadge(l)}${steerBadge(l)}${esc(l.trim)}${l.certified ? ` <span class="badge cpo">CPO</span>` : ""}</span></div>
+    <div class="row"><span class="price">${money(l.price)}</span>${diffBadge(l)}<span>${num(l.mileage)} mi</span>${whereBadge(l)}</div>
+    <div class="row sub">${esc(l.dealer)}${l.group ? " · " + esc(l.group) : l.tier_label ? " · " + esc(l.tier_label) : ""}</div>
+    <div class="row split">${voteCell(l)}<span class="row">${sources.map((x, i) => i === 0
+      ? `<a class="go" href="${esc(x.url)}" target="_blank" rel="noopener">View on ${esc(x.source || "the listing")} ↗</a>`
+      : `<a class="view" href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.source)} ↗</a>`).join("")}</span></div>`;
+  $("#photoInfo").querySelectorAll("[data-vote]").forEach(b => b.addEventListener("click", () => castVote(b.dataset.url, b.dataset.vote, b)));
+}
+
+function setupPhoto() {
+  const dlg = $("#photoDlg");
+  $("#view").addEventListener("click", e => {   // one listener for every row/card, in tables and phone cards
+    const photo = e.target.closest("[data-photo]");
+    if (photo) { e.preventDefault(); openPhoto(photo.dataset.photo); return; }
+    // anywhere else on a car's row opens the listing, unless the click was on a control or was selecting text
+    if (e.target.closest("a, button, input, select, textarea, label")) return;
+    if (String(window.getSelection())) return;
+    const row = e.target.closest("[data-card]");
+    if (row && row.dataset.card) openInNewTab(row.dataset.card);
+  });
+  $("#photoPrev").addEventListener("click", () => stepPhoto(-1));
+  $("#photoNext").addEventListener("click", () => stepPhoto(1));
+  $("#photoClose").addEventListener("click", () => dlg.close());
+  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });   // click outside the box
+  dlg.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); stepPhoto(-1); }
+    if (e.key === "ArrowRight") { e.preventDefault(); stepPhoto(1); }
+  });
+  dlg.addEventListener("close", () => { $("#photoImg").removeAttribute("src"); });
+  $("#photoImg").addEventListener("error", () => { $("#photoImg").hidden = true; $("#photoNone").hidden = false; });
+  let x0 = null;   // swipe left/right on phones
+  $("#photoStage").addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, {passive: true});
+  $("#photoStage").addEventListener("touchend", e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) stepPhoto(dx < 0 ? 1 : -1);
+    x0 = null;
+  });
+}
+
+/* ---------- reaction flurries ---------- */
+const CARS = new Set(["🚗", "🚙", "🏎️", "🛻", "🚚"]);   // these tumble upside down in a hate burst
+const rnd = (a, b) => a + Math.random() * (b - a);
+
+function flurry(kind, rect, rowEl) {
+  const layer = document.querySelector("dialog[open] .fx-local") || $("#fx");
+  if (!layer || !theme().burst[kind] || !layer.animate) return;
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const set = theme().burst[kind];
+  const W = innerWidth, H = innerHeight;
+  const ox = rect ? rect.left + rect.width / 2 : W / 2, oy = rect ? rect.top + rect.height / 2 : H / 2;
+  const burst = calm ? 4 : kind === "like" ? 10 : 30;
+  const rain = calm || kind === "like" ? 0 : (W < 760 ? 14 : 26);
+  if (kind === "hate" && rowEl && !calm) { rowEl.classList.remove("shake"); void rowEl.offsetWidth; rowEl.classList.add("shake"); }
+
+  const spawn = (x, y, frames, opts, emoji) => {
+    const s = document.createElement("span");
+    s.className = "fx";
+    s.textContent = emoji;
+    s.style.fontSize = `${rnd(16, kind === "like" ? 26 : 38)}px`;
+    s.style.left = `${x}px`;
+    s.style.top = `${y}px`;
+    layer.append(s);
+    s.animate(frames, {fill: "forwards", ...opts}).onfinish = () => s.remove();
+  };
+  const t = (x, y, r = 0, sc = 1) => `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${r}deg) scale(${sc})`;
+
+  for (let i = 0; i < burst; i++) {
+    const e = set[Math.floor(Math.random() * set.length)];
+    const crashed = kind === "hate" && CARS.has(e);   // cars in a hate burst tumble upside down
+    const dx = rnd(-1, 1) * Math.min(W * .45, 320), spin = rnd(-1, 1) * (crashed ? 540 : 120);
+    if (kind === "hate") {
+      spawn(ox, oy, [
+        {transform: t(0, 0, crashed ? 180 : 0, .3), opacity: 1},
+        {transform: t(dx * .35, -rnd(60, 170), spin * .4 + (crashed ? 180 : 0), 1), opacity: 1, offset: .3},
+        {transform: t(dx, H - oy + 80, spin + (crashed ? 180 : 0), .9), opacity: .9},
+      ], {duration: rnd(1100, 1800), delay: rnd(0, 180), easing: "cubic-bezier(.25,.1,.7,1)"}, e);
+    } else {
+      spawn(ox, oy, [
+        {transform: t(0, 0, 0, .2), opacity: 0},
+        {transform: t(dx * .25, -rnd(40, 90), spin * .3, 1.1), opacity: 1, offset: .15},
+        {transform: t(dx, -rnd(200, Math.max(260, oy + 40)), spin, .9), opacity: 0},
+      ], {duration: rnd(1300, 2300), delay: rnd(0, 220), easing: "cubic-bezier(.2,.7,.3,1)"}, e);
+    }
+  }
+  // the screen-wide flurry: love floats up from the bottom, hate rains down from the top
+  for (let i = 0; i < rain; i++) {
+    const e = set[Math.floor(Math.random() * set.length)];
+    const crashed = kind === "hate" && CARS.has(e);
+    const x = rnd(0, W), drift = rnd(-80, 80), spin = rnd(-1, 1) * (crashed ? 400 : 90);
+    const from = kind === "hate" ? -40 : H + 40, to = kind === "hate" ? H + 60 : -60;
+    spawn(x, from, [
+      {transform: t(0, 0, crashed ? 180 : 0, rnd(.7, 1.1)), opacity: 0},
+      {transform: t(drift * .3, (to - from) * .15, spin * .2 + (crashed ? 180 : 0)), opacity: 1, offset: .12},
+      {transform: t(drift, to - from, spin + (crashed ? 180 : 0)), opacity: kind === "hate" ? .9 : 0},
+    ], {duration: rnd(1800, 3000), delay: rnd(0, 700), easing: kind === "hate" ? "cubic-bezier(.4,0,.9,.6)" : "ease-out"}, e);
+  }
+}
+
+/* ---------- add a car we found ---------- */
+function openAdd() {
+  if (!who) return pickWho();
+  const f = $("#addForm");
+  f.reset();
+  $("#addVote").innerHTML = VOTES.map(v => `<label><input type="radio" name="vote" value="${v}" ${v === "like" ? "checked" : ""}> ${theme().icon[v]} ${theme().words[v]}</label>`).join("");
+  $("#lookupMsg").innerHTML = "Paste a link. The details fill in by themselves. (Cars.com pages that our searches haven't seen need typing in.)";
+  $("#foundCard").hidden = true;
+  clearCarFields(f);   // form.reset() leaves hidden fields (photo, VIN, title...) from the last car
+  lastLooked = "";
+  $("#addMsg").textContent = `Adding as ${who}`;
+  $("#addDlg").showModal();
+}
+
+let lastLooked = "", lookupSeq = 0, lookupTimer = null;
+const LOOKUP_FIELDS = ["year", "make", "model", "trim", "mileage", "price", "dealer", "city", "image", "vin", "source", "title", "market_value", "market_src"];
+
+function clearCarFields(f) {
+  for (const k of [...LOOKUP_FIELDS, "distance"]) f.elements.namedItem(k).value = "";
+}
+
+// a fresh link replaces whatever an earlier link filled in; "Get details" on the same link only fills blanks
+async function lookupLink(force) {
+  const f = $("#addForm"), url = f.url.value.trim();
+  if (!/^https?:\/\/\S+\.\S+/.test(url)) { if (force === true) $("#lookupMsg").textContent = "Paste a full link starting with https://"; return; }
+  if (url === lastLooked && force !== true) return;
+  const fresh = url !== lastLooked;
+  if (fresh && lastLooked) clearCarFields(f);   // don't let a new link keep the previous car's details
+  lastLooked = url;
+  const seq = ++lookupSeq;
+  $("#lookupBtn").disabled = true;
+  $("#foundCard").hidden = true;
+  $("#lookupMsg").innerHTML = `<span class="spinner"></span> Getting the car's details…`;
+  try {
+    const d = await api("/api/lookup?url=" + encodeURIComponent(url));
+    if (seq !== lookupSeq) return;   // a newer link was pasted meanwhile
+    const el = k => f.elements.namedItem(k);
+    for (const k of [...LOOKUP_FIELDS, "distance"]) {
+      const v = d[k] == null ? "" : (k === "distance" ? Math.round(d[k]) : d[k]);
+      if (fresh || !el(k).value) el(k).value = v === "" && !fresh ? el(k).value : v;
+    }
+    if (d.channel) f.channel.value = d.channel;
+    const got = ["year", "make", "model", "mileage", "price"].filter(k => el(k).value).length;
+    if (d.found && (d.make || d.model)) {
+      const card = $("#foundCard");
+      card.className = `full found-card${d.warning ? " warn" : ""}`;
+      card.innerHTML = `${d.image ? `<img src="${esc(d.image)}" alt="" referrerpolicy="no-referrer">` : ""}
+        <div><div class="ttl">✓ ${esc(d.year)} ${esc(d.make)} ${esc(d.model)} ${esc(d.trim || "")}</div>
+        <div>${money(d.price)}${d.mileage != null ? ` · ${num(d.mileage)} mi` : ""}${d.dealer ? ` · ${esc(d.dealer)}` : ""}${d.distance != null ? ` (${Math.round(d.distance)} mi away)` : ""}</div>
+        <div class="sub">${esc(d.how || "")}${d.warning ? ` · ⚠️ ${esc(d.warning)}` : ""}</div></div>`;
+      card.hidden = false;
+      $("#lookupMsg").textContent = got < 5 ? `Got ${got} of 5 key details. Fill in the rest below if you know them.` : "Got it. Check the details, pick your vote and save.";
+    } else {
+      $("#lookupMsg").textContent = "Couldn't find car details on that page. Type them in below, or just save with the link.";
+    }
+  } catch (err) {
+    if (seq === lookupSeq) $("#lookupMsg").textContent = `${err.message}. You can still save with just the link.`;
+  } finally {
+    if (seq === lookupSeq) $("#lookupBtn").disabled = false;
+  }
+}
+
+async function saveAdd(e) {
+  e.preventDefault();
+  const f = $("#addForm");
+  const listing = {};
+  if (lastLooked !== f.url.value.trim()) await lookupLink(true);   // link only? get the details first
+  for (const k of ["url", "distance", ...LOOKUP_FIELDS]) listing[k] = String(f.elements.namedItem(k).value).trim();
+  listing.channel = f.channel.value;
+  if (!listing.source) { try { listing.source = new URL(listing.url).hostname.replace(/^www\./, ""); } catch {} }
+  $("#addSave").disabled = true;
+  $("#addMsg").textContent = "Saving…";
+  try {
+    votes = await api("/api/manual", {listing, who, vote: f.vote.value, note: f.note.value.trim()});
+    $("#addDlg").close();
+    flurry(f.vote.value, $("#addBtn").getBoundingClientRect());
+    setTab("family");
+  } catch (err) { $("#addMsg").textContent = err.message; }
+  finally { $("#addSave").disabled = false; }
+}
+
+/* ---------- export ---------- */
+function exportCsv() {
+  const rows = tab === "family" ? visible(familyRows())
+    : data ? visible(tab === "picks" ? data.listings.filter(l => l._top) : data.listings) : [];
+  if (!rows.length) return;
+  const cols = ["channel", "year", "make", "model", "trim", "mileage", "price", "market_value", "price_diff", "market_src", "distance", "dealer", "group", "city", "source", "url", "vin"];
+  const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const lines = [[...cols, ...family, "points"].join(","),
+    ...rows.map(l => [...cols.map(c => q(l[c])), ...family.map(n => q(votesFor(l.url)[n])), pointsFor(l.url)].join(","))];
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lines.join("\r\n")], {type: "text/csv"}));
+  a.download = `cars_${tab}.csv`;
+  a.click();
+}
+
+init();
+</script>
+</body>
+</html>

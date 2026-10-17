@@ -1,0 +1,142 @@
+{
+  "_readme": "Template. Run setup (setup.bat / setup.sh) to create your own config.json from this; config.json is never committed.",
+  "port": 8765,
+  "family": [
+    {
+      "name": "Alex",
+      "theme": "truckyard"
+    },
+    {
+      "name": "Sam",
+      "theme": "farmhouse"
+    },
+    {
+      "name": "Riley",
+      "theme": "ballpark"
+    }
+  ],
+  "_themes": "classic, ballpark (softball, dogs, capybaras), farmhouse (hearts, dogs, goats, sheep), truckyard (pickups, diamond plate)",
+  "_family_profile": "The shared filters everyone sees. Change them on the page with Edit filters > Save as family filters. max_local / max_online cap how many top picks show; max_per_model keeps one model from crowding the list.",
+  "family_profile": {
+    "zip": "",
+    "radius": 50,
+    "body": "suv",
+    "max_price": null,
+    "max_miles": null,
+    "min_year": null,
+    "keywords": [],
+    "sources": [
+      "cargurus",
+      "autotrader",
+      "carscom",
+      "carvana"
+    ],
+    "sizes": [
+      "subcompact",
+      "compact",
+      "midsize"
+    ],
+    "min_tier": 2,
+    "max_local": 40,
+    "max_online": 15,
+    "max_per_model": 4
+  },
+  "max_per_source": 300,
+  "min_tier": 2,
+  "high_volume_min_listings": 6,
+  "_tiers": "4 National retailer, 3 Major dealer group, 2 Franchise / high-volume dealer, 1 Independent dealer, 0 Private seller",
+  "national_retailers": [
+    "carvana",
+    "carmax",
+    "echopark",
+    "autonation usa",
+    "drivetime",
+    "vroom",
+    "off lease only",
+    "enterprise car sales",
+    "hertz car sales"
+  ],
+  "_online_markers": "Dealer names containing these are treated as delivery/online sellers even if they list a local ZIP.",
+  "online_markers": [
+    "delivery from",
+    "delivered",
+    "ships from",
+    "online only"
+  ],
+  "_dealer_groups": "Display name -> name fragments found in dealer names. Big national groups are listed; setup adds your area's big local groups (look at the Dealers to visit tab after a first search for ideas).",
+  "dealer_groups": {
+    "AutoNation": [
+      "autonation"
+    ],
+    "Lithia / Driveway": [
+      "lithia",
+      "driveway"
+    ],
+    "Penske": [
+      "penske"
+    ],
+    "Hendrick": [
+      "hendrick"
+    ],
+    "Asbury": [
+      "asbury"
+    ],
+    "Sonic Automotive": [
+      "sonic automotive"
+    ],
+    "Group 1": [
+      "group 1"
+    ],
+    "Larry H. Miller": [
+      "larry h miller",
+      "larry h. miller"
+    ],
+    "Ken Garff": [
+      "ken garff"
+    ],
+    "Berkshire Hathaway Automotive": [
+      "berkshire hathaway"
+    ]
+  },
+  "franchise_brands": [
+    "acura",
+    "alfa romeo",
+    "audi",
+    "bmw",
+    "buick",
+    "cadillac",
+    "chevrolet",
+    "chevy",
+    "chrysler",
+    "dodge",
+    "fiat",
+    "ford",
+    "genesis",
+    "gmc",
+    "honda",
+    "hyundai",
+    "infiniti",
+    "jaguar",
+    "jeep",
+    "kia",
+    "land rover",
+    "lexus",
+    "lincoln",
+    "mazda",
+    "mercedes",
+    "mini",
+    "mitsubishi",
+    "nissan",
+    "porsche",
+    "ram",
+    "subaru",
+    "toyota",
+    "volkswagen",
+    "vw",
+    "volvo",
+    "cdjr",
+    "maserati",
+    "rivian",
+    "polestar"
+  ]
+}
