@@ -154,13 +154,27 @@ def _float(v):
         return None
 
 
-def lan_ip():
+def lan_ips():
+    """This computer's network addresses, home-Wi-Fi-looking ones (192.168.x) first. A VPN can make the 'default'
+    address a 10.x work address that phones at home can't reach, so we list every private address we find."""
+    found = []
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             s.connect(("10.255.255.255", 1))  # no packet is sent; just picks the outbound interface
-            return s.getsockname()[0]
+            found.append(s.getsockname()[0])
     except OSError:
-        return None
+        pass
+    try:
+        found += [i[4][0] for i in socket.getaddrinfo(socket.gethostname(), None, socket.AF_INET)]
+    except OSError:
+        pass
+    private = [ip for ip in dict.fromkeys(found) if ip.startswith(("192.168.", "10.", "172.")) and not ip.startswith("127.")]
+    return sorted(private, key=lambda ip: (not ip.startswith("192.168."), not ip.startswith("172."), ip))
+
+
+def port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(("127.0.0.1", port)) == 0
 
 
 def serve(port, open_browser, share):
@@ -308,12 +322,23 @@ def serve(port, open_browser, share):
 
     host = "0.0.0.0" if share else "127.0.0.1"
     url = f"http://localhost:{port}"
+    if port_in_use(port):
+        sys.exit(f"Port {port} is already in use. Car Finder may already be running: try {url}\n"
+                 f"Otherwise close the other program, or change \"port\" in config.json.")
     print(f"Car Finder running at {url}  (Ctrl+C to stop)")
     if share:
-        ip = lan_ip()
-        base = f"http://{ip or '<this-PC-ip>'}:{port}"
-        print(f"Family link (same Wi-Fi): {base}   <- everyone uses this one link and picks their name")
-        print("(If Windows Firewall asks, allow Python on Private networks.)")
+        ips = lan_ips()
+        print(f"Family link (same Wi-Fi): http://{ips[0] if ips else '<this-computer-ip>'}:{port}"
+              "   <- everyone uses this one link and picks their name")
+        if len(ips) > 1:
+            print("  If phones can't open it, try: " + ", ".join(f"http://{ip}:{port}" for ip in ips[1:]) +
+                  "  (a VPN can add extra addresses)")
+        if sys.platform == "darwin":
+            print("(If macOS asks whether Python can accept incoming network connections, click Allow.)")
+        elif sys.platform.startswith("win"):
+            print("(If Windows Firewall asks, allow Python on Private networks.)")
+        else:
+            print(f"(If this computer has a firewall turned on, allow port {port}.)")
     if open_browser:
         threading.Timer(1.0, lambda: webbrowser.open(url)).start()
     app.run(host=host, port=port, threaded=True)

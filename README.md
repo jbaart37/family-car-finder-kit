@@ -88,12 +88,17 @@ ranked by your votes and the price.
 
 ## Setup (about 5 minutes)
 
-You need **Python 3.10+** ([python.org](https://www.python.org/downloads/); on Windows tick *"Add python.exe to PATH"*).
+You need **Python 3.10 or newer**:
+- **Windows:** install from [python.org](https://www.python.org/downloads/) and tick *"Add python.exe to PATH"*.
+- **Mac:** the Python that comes with macOS (3.9) is too old. Install from [python.org](https://www.python.org/downloads/macos/),
+  or run `brew install python` if you use Homebrew.
 
 1. Download this repo (green **Code** button → *Download ZIP*, then unzip, or `git clone`).
 2. Run the setup:
    - **Windows:** double-click `setup.bat`
-   - **Mac / Linux:** open a terminal in the folder and run `./setup.sh`
+   - **Mac:** double-click `Setup.command`. The first time, macOS may say it's from an unidentified developer: right-click it,
+     choose **Open**, then **Open** again. (Or in Terminal: `./setup.sh`, or `bash setup.sh` if you get "permission denied".)
+   - **Linux:** `./setup.sh`
 
    It installs what it needs into a private `.venv` folder (nothing system-wide), then asks for:
    - your ZIP code and search radius;
@@ -104,10 +109,12 @@ You need **Python 3.10+** ([python.org](https://www.python.org/downloads/); on W
    It can run the first search right away.
 3. Start the family page:
    - **Windows:** double-click `start.bat`
-   - **Mac / Linux:** `./start.sh`
+   - **Mac:** double-click `Start.command` (or `./start.sh`). The Mac stays awake while it's running, but closing a laptop's lid
+     still puts it to sleep, so leave it open (and plugged in).
+   - **Linux:** `./start.sh`
 
-   It prints a **Family link** like `http://192.168.1.20:8765`. Text that link to the family **once**. The first time Windows asks about
-   the firewall, allow **Private networks** so phones can connect.
+   It prints a **Family link** like `http://192.168.1.20:8765`. Text that link to the family **once**. The first time, let it through
+   the firewall so phones can connect: on Windows allow **Private networks**; on a Mac click **Allow**.
 
 Run setup again any time to change your answers. Votes and past searches are kept.
 
@@ -121,6 +128,19 @@ Run setup again any time to change your answers. Votes and past searches are kep
 
 To refresh the listings in a few days, click **Edit filters → Search**. Votes carry over, price changes are flagged, and cars that
 disappeared are marked *may be sold*.
+
+## Troubleshooting
+
+- **Phones can't open the family link:**
+  - Check they're on the same Wi-Fi as the computer.
+  - Check the firewall question was answered **Allow**.
+  - Check the computer isn't asleep.
+  - If a VPN is running, the start window lists other addresses to try.
+- **"Port 8765 is already in use":** Car Finder is probably already running in another window. Open http://localhost:8765, or close
+  the other window.
+- **"Couldn't look up that ZIP" during setup:** usually no internet connection. Search still works if the ZIP is right.
+- **A site shows a red error chip after a search:** that site blocked the request. This happens more on work networks and VPNs; at home it
+  usually clears up on the next search. If it keeps happening, the site may have changed its pages (see `carsearch/sources/`).
 
 ## How it works (for the curious)
 

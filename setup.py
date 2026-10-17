@@ -55,15 +55,17 @@ def ask_choice(question, options, default):
 
 
 def place_name(zip_code):
-    """'Springfield, IL' for a ZIP, or '' if the lookup isn't available (also downloads the ZIP table once)."""
+    """('Springfield, IL', '') for a ZIP, or ('', reason) if the lookup failed. Also downloads the ZIP table once."""
     try:
+        from carsearch.geo import use_certifi
+        use_certifi()   # python.org's Mac Python has no certificates until "Install Certificates" is run
         import pgeocode
         row = pgeocode.Nominatim("us").query_postal_code(zip_code)
         if isinstance(row.place_name, str):
-            return f"{row.place_name.split(',')[0]}, {row.state_code}"
-    except Exception:
-        pass
-    return ""
+            return f"{row.place_name.split(',')[0]}, {row.state_code}", ""
+        return "", "that ZIP code wasn't found"
+    except Exception as e:
+        return "", f"{type(e).__name__}: {str(e)[:120]}"
 
 
 def main():
@@ -80,8 +82,12 @@ def main():
         if len(zip_code) == 5 and zip_code.isdigit():
             break
         print("  Please enter a 5-digit US ZIP code.")
-    where = place_name(zip_code)
-    print(f"  Found: {where}" if where else "  (Couldn't look up that ZIP right now; it will still work if it's valid.)")
+    where, problem = place_name(zip_code)
+    if where:
+        print(f"  Found: {where}")
+    else:
+        print(f"  Couldn't look up that ZIP ({problem}).")
+        print("  It will still work if the ZIP is right. If this mentions certificates or the internet, check your connection.")
     radius = ask_number("Search within how many miles? (10 / 25 / 50 / 75 / 100 / 200)", prof.get("radius", 50), allow_blank=False)
 
     # what
