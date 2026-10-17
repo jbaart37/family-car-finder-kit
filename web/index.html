@@ -232,6 +232,10 @@
   tr:hover .hide-dealer, .card .hide-dealer, .hide-dealer:focus-visible { opacity: .75; }
   .hide-dealer:hover { opacity: 1; color: var(--bad); }
   .hide-row { padding: 2px 8px; font-size: 12px; white-space: nowrap; }
+  /* family list: a hidden dealer's cars keep rank and votes, but read as "don't follow up" */
+  tr.dealer-hidden td, .card.dealer-hidden { opacity: .42; filter: grayscale(1); transition: opacity .15s; }
+  tr.dealer-hidden:hover td, .card.dealer-hidden:hover, .card.dealer-hidden:focus-within { opacity: .8; }
+  tr.dealer-hidden td.model a, .card.dealer-hidden .ttl a, tr.dealer-hidden td.num b, .card.dealer-hidden .price { text-decoration: line-through; }
   .hidden-bar { display: flex; justify-content: flex-end; }
   .hidden-bar:has(#hiddenBtn[hidden]) { display: none; }
   .hidden-panel ul.hidden-list { margin: 8px 0 0; padding-left: 18px; }
@@ -1223,7 +1227,7 @@ function carCard(l, o = {}) {
   const where = l.channel === "online"
     ? `<span class="badge where-online">🚚 Online · delivered</span>`
     : `<span class="badge where-local">📍 ${l.distance != null ? Number(l.distance).toFixed(0) + " mi" : "local"}</span>${l.city ? ` <span class="sub">${esc(l.city)}</span>` : ""}`;
-  return `<article class="card ${o.hated ? "hated" : ""} ${photo ? "" : "noimg"}" data-card="${esc(l.url)}">
+  return `<article class="card ${o.hated ? "hated" : ""} ${isHiddenDealer(l) ? "dealer-hidden" : ""} ${photo ? "" : "noimg"}" data-card="${esc(l.url)}">
     ${photo ? `<button type="button" class="ph thumb-btn" data-photo="${esc(l.url)}" title="See the photo"><img loading="lazy" referrerpolicy="no-referrer" src="${esc(l.image)}" alt=""></button>` : ""}
     <div>
       <div class="ttl">${o.rank ? `<span class="rank">${o.rank}.</span>` : ""}<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.year)} ${esc(l.make)} ${esc(l.model || l.title || "Listing")}</a></div>
@@ -1293,7 +1297,7 @@ function renderFamily(rows) {
     const remove = l._manual ? ` <button class="ghost" data-remove="${esc(l.url)}" title="Remove this added car" style="padding:2px 8px">✕</button>` : "";
     html += cards
       ? carCard(l, {rank, hated: b === "hated", points: l._points, extra: note ? `<div class="sub" style="margin-top:4px">${note}</div>` : "", remove})
-      : `<tr class="${b === "hated" ? "hated" : ""}" data-card="${esc(l.url)}">
+      : `<tr class="${b === "hated" ? "hated" : ""} ${isHiddenDealer(l) ? "dealer-hidden" : ""}" data-card="${esc(l.url)}">
       <td class="rank">${rank}</td>
       ${carCells(l, photos)}
       <td>${voteCell(l)}</td>
