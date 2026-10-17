@@ -61,6 +61,8 @@ ranked by your votes and the price.
 - **Lets everyone vote:** each person taps their name, then reacts to cars with **love / like / hate**. Votes show up for everyone.
 - **Learns from votes:** hate one Studebaker Lark and every Lark sinks (Studebaker hasn't built a car since 1966, so no hard feelings); like a model and it moves up a little. The **Family list** ranks everything you've voted on.
 - **Shows which dealers are worth the drive:** **Dealers to visit** ranks nearby dealers by good matches and family favorites.
+- **Skip a dealer:** if a dealer isn't for you (say, a repair shop that also lists a few cars), tap the ✕ by its name to hide all its
+  cars for everyone. The top picks refill from other dealers, votes you already made are kept, and **Hidden dealers** brings it back.
 - **Takes cars you found yourself:** **➕ Add a car we found** lets you paste a link and it fills in the details.
 - **Works on phones and computers.**
 

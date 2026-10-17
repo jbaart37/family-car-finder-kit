@@ -22,6 +22,7 @@ from carsearch.sources import SOURCES
 WEB = ROOT / "web"
 REPORTS = ROOT / "reports"
 VOTES = RESULTS / "votes.json"
+HIDDEN = RESULTS / "hidden_dealers.json"
 VOTE_VALUES = ("love", "like", "hate")
 THEME_KEYS = ("classic", "ballpark", "farmhouse", "truckyard", "garden", "sparkle", "beach", "cafe")
 MAX_FAMILY = 8
@@ -82,6 +83,18 @@ def family_members(cfg):
 
 def family_themes(cfg):
     return {p["name"]: p.get("theme", "classic") for p in cfg.get("family") or [] if p.get("name")}
+
+
+def dealer_key(name):
+    """Same dealer however a site spells it: 'Smith Motors Inc.' == 'SMITH MOTORS INC'. Must match dealerKey() in the page."""
+    words = "".join(c if c.isalnum() else " " for c in name.lower()).split()
+    while words and words[-1] in ("inc", "llc", "co", "corp", "ltd"):
+        words.pop()
+    return " ".join(words)
+
+
+def read_hidden():
+    return json.loads(HIDDEN.read_text(encoding="utf-8")) if HIDDEN.exists() else {}
 
 
 def read_votes():
@@ -294,6 +307,32 @@ def serve(port, open_browser, share):
                 cfg.pop("family_members", None)
                 (ROOT / "config.json").write_text(json.dumps(cfg, indent=2), encoding="utf-8")
             return jsonify(family=family_members(cfg), family_themes=family_themes(cfg))
+        except ValueError as e:
+            return jsonify(error=str(e)), 400
+
+    @app.get("/api/hidden")
+    def hidden_get():
+        return jsonify(read_hidden())
+
+    @app.post("/api/hidden")
+    def hidden_set():
+        """Hide (or bring back) every car from one dealer, for the whole family."""
+        d = request.get_json(force=True)
+        try:
+            who = _who(d)
+            name = " ".join(str(d.get("dealer") or "").split())[:120]
+            if not name:
+                raise ValueError("which dealer?")
+            key = dealer_key(name)
+            with _lock:
+                data = read_hidden()
+                if d.get("hide", True):
+                    data[key] = {"name": name, "by": who, "at": datetime.now().isoformat(timespec="seconds")}
+                else:
+                    data.pop(key, None)
+                RESULTS.mkdir(exist_ok=True)
+                HIDDEN.write_text(json.dumps(data, indent=1), encoding="utf-8")
+            return jsonify(data)
         except ValueError as e:
             return jsonify(error=str(e)), 400
 

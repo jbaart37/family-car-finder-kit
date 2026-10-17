@@ -228,6 +228,14 @@
   .where-local { color: var(--local); background: var(--local-bg); }
   .where-online { color: var(--online); background: var(--online-bg); }
   .cpo { color: var(--t3); background: var(--t3-bg); font-size: 11px; }
+  .hide-dealer { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 12px; padding: 0 4px; opacity: 0; transition: opacity .15s; }
+  tr:hover .hide-dealer, .card .hide-dealer, .hide-dealer:focus-visible { opacity: .75; }
+  .hide-dealer:hover { opacity: 1; color: var(--bad); }
+  .hide-row { padding: 2px 8px; font-size: 12px; white-space: nowrap; }
+  .hidden-bar { display: flex; justify-content: flex-end; }
+  .hidden-bar:has(#hiddenBtn[hidden]) { display: none; }
+  .hidden-panel ul.hidden-list { margin: 8px 0 0; padding-left: 18px; }
+  .hidden-panel li { margin: 4px 0; }
   .badge.size { color: var(--muted); background: var(--chip); font-size: 11px; font-weight: 600; padding: 1px 6px; }
   .badge.sunk { color: var(--bad); background: var(--bad-bg); font-size: 11px; padding: 1px 6px; }
   .badge.boost { color: var(--good); background: var(--good-bg); font-size: 11px; padding: 1px 6px; }
@@ -499,6 +507,8 @@
     <button class="ghost" id="csv">Export CSV</button>
   </div>
 
+  <div class="hidden-bar"><button class="ghost" id="hiddenBtn" hidden></button></div>
+  <div class="panel hidden-panel" id="hiddenPanel" hidden></div>
   <div class="steer" id="steer" hidden></div>
   <div class="tablewrap" id="view"><div class="empty">Loading…</div></div>
   <p class="note">
@@ -770,14 +780,21 @@ async function init() {
     return;
   }
   try { votes = await api("/api/votes"); } catch {}
+  try { hiddenDealers = await api("/api/hidden"); } catch {}
   const names = await refreshSaved();
   if (names.length) await loadSaved(names[0]);   // everyone opens to the latest family search
   else { $("#formPanel").hidden = false; render(); }
   $("#joinOpen").addEventListener("click", () => { $("#joinForm").hidden = false; $("#joinOpen").hidden = true; $("#joinName").focus(); });
   $("#joinForm").addEventListener("submit", joinFamily);
+  $("#hiddenBtn").addEventListener("click", () => { $("#hiddenPanel").hidden = !$("#hiddenPanel").hidden; renderHiddenPanel(); });
+  document.addEventListener("click", e => {   // the little ✕ by any dealer name, anywhere on the page
+    const b = e.target.closest("[data-hide-dealer]");
+    if (b) { e.preventDefault(); e.stopPropagation(); hideDealer(b.dataset.hideDealer); }
+  }, true);
   setInterval(async () => {
     try {
       votes = await api("/api/votes");
+      try { hiddenDealers = await api("/api/hidden"); } catch {}
       const m = await api("/api/meta");   // someone may have joined the family since this page opened
       if (JSON.stringify(m.family) !== JSON.stringify(family)) { family = m.family; familyThemes = m.family_themes || {}; }
       render();
@@ -1002,7 +1019,7 @@ function rerank() {
   for (const [channel, cap] of [["local", P.max_local ?? 40], ["online", P.max_online ?? 15]]) {
     const perModel = new Map();
     let picked = 0;
-    for (const l of data.listings.filter(x => x.channel === channel).sort((a, b) => a._adj - b._adj)) {
+    for (const l of data.listings.filter(x => x.channel === channel && !isHiddenDealer(x)).sort((a, b) => a._adj - b._adj)) {
       if (cap && picked >= cap) break;
       const id = modelId(l);
       if (P.max_per_model && (perModel.get(id) || 0) >= P.max_per_model) continue;
@@ -1113,7 +1130,10 @@ function render() {
   rerank();
   renderSteer();
   if ($("#photoDlg").open) refreshPhotoInfo();
-  const all = data ? data.listings : [];
+  const all = data ? data.listings.filter(l => !isHiddenDealer(l)) : [];
+  $("#hiddenBtn").hidden = !Object.keys(hiddenDealers).length;
+  $("#hiddenBtn").textContent = `🚫 Hidden dealers (${Object.keys(hiddenDealers).length})`;
+  if (!$("#hiddenPanel").hidden) renderHiddenPanel();
   const fam = familyRows();
   $("#nFamily").textContent = `(${fam.length})`;
   $("#nPicks").textContent = data ? `(${visible(all.filter(l => l._top)).length})` : "";
@@ -1182,7 +1202,7 @@ function carCells(l, photos) {
     <td class="num"><b>${money(l.price)}</b></td>
     <td>${diffBadge(l)}</td>
     <td>${whereBadge(l)}</td>
-    <td class="dealer">${esc(l.dealer)}<div class="sub">${esc(l.group || l.tier_label)}</div></td>`;
+    <td class="dealer">${esc(l.dealer)}${hideBtn(l)}<div class="sub">${esc(l.group || l.tier_label)}</div></td>`;
 }
 
 const CAR_HEAD = photos => `${photos ? `<th class="nosort"></th>` : ""}
@@ -1210,7 +1230,7 @@ function carCard(l, o = {}) {
       ${l.trim || l.certified || l.size ? `<div class="sub">${sizeBadge(l)}${steerBadge(l)}${esc(l.trim)}${l.certified ? ` <span class="badge cpo">CPO</span>` : ""}</div>` : ""}
       <div class="price-line"><span class="price">${money(l.price)}</span>${diffBadge(l)}</div>
       <div class="meta"><span>${num(l.mileage)} mi</span>${where}</div>
-      <div class="sub">${esc(l.dealer)}${l.group ? " · " + esc(l.group) : ""}</div>
+      <div class="sub">${esc(l.dealer)}${l.group ? " · " + esc(l.group) : ""}${hideBtn(l)}</div>
       ${o.extra || ""}
     </div>
     <div class="foot">${voteCell(l)}<span class="links">${o.points != null ? `<b class="points">${o.points > 0 ? "+" : ""}${o.points} pts</b>&nbsp;` : ""}${links(l)}${o.remove || ""}</span></div>
@@ -1269,7 +1289,7 @@ function renderFamily(rows) {
     rank++;
     const tag = l._manual ? `<span class="badge manual">➕ added by ${esc(l._added_by)}</span>` : (l._stale ? `<span class="badge unknown" title="This car wasn't in the latest search: it may have sold, or its price went over the family filters">not in latest search: may be sold</span>` : "");
     const priceMove = l._was ? ` <span class="badge ${l.price < l._was ? "below" : "above"}" title="Price when the family first voted on it">💲 was ${money(l._was)}</span>` : "";
-    const note = `${tag}${priceMove}${l._note ? `<div>${esc(l._note)}</div>` : ""}`;
+    const note = `${isHiddenDealer(l) ? `<span class="badge unknown" title="Someone hid this dealer; the family's votes are kept">🚫 dealer hidden</span> ` : ""}${tag}${priceMove}${l._note ? `<div>${esc(l._note)}</div>` : ""}`;
     const remove = l._manual ? ` <button class="ghost" data-remove="${esc(l.url)}" title="Remove this added car" style="padding:2px 8px">✕</button>` : "";
     html += cards
       ? carCard(l, {rank, hated: b === "hated", points: l._points, extra: note ? `<div class="sub" style="margin-top:4px">${note}</div>` : "", remove})
@@ -1304,12 +1324,13 @@ function renderDealers(list) {
   if (!list.length) { $("#view").innerHTML = emptyState("No local dealers in this search."); return; }
   const key = sortKey || "count", desc = sortKey ? sortDesc : true;
   $("#view").innerHTML = `<table><thead><tr>${th("dealer", "Dealer")}${th("group", "Group")}${th("distance", "Distance", "num")}${th("city", "Town")}
-      ${th("count", "Matching cars", "num")}${th("picks", "Top picks", "num")}${th("below", "Below market", "num")}${th("voted", "Family likes", "num")}${th("min", "Price range", "num")}</tr></thead><tbody>
+      ${th("count", "Matching cars", "num")}${th("picks", "Top picks", "num")}${th("below", "Below market", "num")}${th("voted", "Family likes", "num")}${th("min", "Price range", "num")}<th class="nosort"></th></tr></thead><tbody>
       ${sortRows(list, key, desc).map(d => `<tr class="clickable" data-dealer="${esc(d.dealer)}">
         <td class="model"><a href="#">${esc(d.dealer)}</a></td><td>${esc(d.group || d.tier_label)}</td>
         <td class="num">${d.distance != null ? d.distance.toFixed(0) + " mi" : ""}</td><td>${esc(d.city)}</td>
         <td class="num">${d.count}</td><td class="num">${d.picks || ""}</td><td class="num">${d.below || ""}</td><td class="num">${d.voted || ""}</td>
-        <td class="num">${money(d.min)}–${money(d.max)}</td></tr>`).join("")}</tbody></table>`;
+        <td class="num">${money(d.min)}–${money(d.max)}</td>
+        <td><button class="ghost hide-row" data-hide-dealer="${esc(d.dealer)}" title="Hide every car from this dealer">✕ Hide</button></td></tr>`).join("")}</tbody></table>`;
   bindTable();
   document.querySelectorAll("[data-dealer]").forEach(r => r.addEventListener("click", e => {
     e.preventDefault();
@@ -1420,6 +1441,43 @@ function celebrateMatch(l) {
   box.hidden = false;
   clearTimeout(celebrateMatch.timer);
   celebrateMatch.timer = setTimeout(() => { box.hidden = true; }, 6000);
+}
+
+/* ---------- hidden dealers ---------- */
+let hiddenDealers = {};   // dealerKey -> {name, by, at}, shared by the family (results/hidden_dealers.json)
+
+function dealerKey(name) {   // must match dealer_key() in car_agent.py
+  const words = String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().split(" ").filter(Boolean);
+  while (words.length && ["inc", "llc", "co", "corp", "ltd"].includes(words[words.length - 1])) words.pop();
+  return words.join(" ");
+}
+const isHiddenDealer = l => !!(l && l.dealer && hiddenDealers[dealerKey(l.dealer)]);
+const hideBtn = l => l.dealer && !STATIC && l.seller_type !== "RETAILER"
+  ? ` <button class="hide-dealer" data-hide-dealer="${esc(l.dealer)}" title="Hide every car from ${esc(l.dealer)}">✕</button>` : "";
+
+async function hideDealer(name, hide = true) {
+  if (STATIC) return;
+  if (!who) return pickWho();
+  if (hide) {
+    const n = (data ? data.listings : []).filter(l => dealerKey(l.dealer) === dealerKey(name)).length;
+    if (!confirm(`Hide all ${n || ""} cars from ${name} for everyone?\n\nYou can bring them back any time from "Hidden dealers".`)) return;
+  }
+  try {
+    hiddenDealers = await api("/api/hidden", {dealer: name, who, hide});
+    if (filter && hide) filter = null;
+    render();
+    if (hide) showToast(`🚫 ${esc(name)} is hidden. Other dealers' cars moved up.`, 4000);
+  } catch (err) { setStatus(`<span class="chip err">${esc(err.message)}</span>`); }
+}
+
+function renderHiddenPanel() {
+  const rows = Object.values(hiddenDealers);
+  $("#hiddenPanel").innerHTML = rows.length
+    ? `<b>Hidden dealers</b> <span class="sub">their cars don't show anywhere except votes already in the Family list</span>
+       <ul class="hidden-list">${rows.map(h => `<li>${esc(h.name)} <span class="sub">hidden by ${esc(h.by)}</span>
+         <button class="ghost" data-unhide="${esc(h.name)}">↩ Bring back</button></li>`).join("")}</ul>`
+    : `<span class="sub">No hidden dealers.</span>`;
+  $("#hiddenPanel").querySelectorAll("[data-unhide]").forEach(b => b.addEventListener("click", () => hideDealer(b.dataset.unhide, false)));
 }
 
 /* ---------- voting ---------- */
