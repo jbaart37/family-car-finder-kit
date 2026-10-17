@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Car Finder</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%97%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@600;700&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
   :root {
     --bg: #f6f7f9; --panel: #ffffff; --ink: #1b1f24; --muted: #66707c; --line: #e3e6ea;
@@ -103,6 +102,55 @@
   html[data-theme="truckyard"] img.thumb, html[data-theme="truckyard"] .card .ph img { border-radius: 3px; border: 2px solid #9aa5b1; }
   html[data-theme="truckyard"] a.view { color: #c2410c; }
   @media (prefers-color-scheme: dark) { html[data-theme="truckyard"] a.view { color: #fb923c; } html[data-theme="farmhouse"] a.view { color: #ff8fb7; } }
+
+  /* ---------- Garden Party theme: flowers and butterflies ---------- */
+  html[data-theme="garden"] { --bg: #f8f5fc; --panel: #fffdff; --ink: #33283f; --muted: #7d6f8c; --line: #e8def3; --accent: #7c4dcc; --accent-ink: #ffffff; --row-hover: #f3ecfb; --chip: #efe6f8; --header-bg: linear-gradient(180deg, #b393ea 0%, #8a62cf 100%); --header-ink: #ffffff; --header-line: #f6d6e8; --tab-line: 3px solid #7c4dcc; --love: #c2417a; --love-bg: #fbe3ee; --like: #6a4fb3; --like-bg: #ece5f8; --hate: #7d6f8c; --hate-bg: #efe9f4; --title-font: "Quicksand", system-ui, sans-serif; --pattern: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%3Ctext%20x%3D%2714%27%20y%3D%2738%27%20font-size%3D%2722%27%20opacity%3D%270.13%27%3E%F0%9F%8C%B8%3C%2Ftext%3E%3Ctext%20x%3D%2770%27%20y%3D%2796%27%20font-size%3D%2722%27%20opacity%3D%270.13%27%3E%F0%9F%A6%8B%3C%2Ftext%3E%3C%2Fsvg%3E"); }
+  @media (prefers-color-scheme: dark) { html[data-theme="garden"] { --bg: #17121f; --panel: #201a2b; --ink: #efe8f7; --muted: #b3a6c4; --line: #352b44; --accent: #c4a6ff; --accent-ink: #1d1430; --row-hover: #271f34; --chip: #2c2339; --header-bg: linear-gradient(180deg, #5b3d8f 0%, #45306d 100%); --love: #ff8fb7; --love-bg: #441a2e; --like: #c4a6ff; --like-bg: #2c2344; --hate: #b3a6c4; --hate-bg: #2c2339; --pattern: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%3Ctext%20x%3D%2714%27%20y%3D%2738%27%20font-size%3D%2722%27%20opacity%3D%270.09%27%3E%F0%9F%8C%B8%3C%2Ftext%3E%3Ctext%20x%3D%2770%27%20y%3D%2796%27%20font-size%3D%2722%27%20opacity%3D%270.09%27%3E%F0%9F%A6%8B%3C%2Ftext%3E%3C%2Fsvg%3E"); } }
+  html[data-theme="garden"] header { border-bottom: 4px dotted var(--header-line); padding: 14px 24px; }
+  html[data-theme="garden"] .tab { font-family: var(--title-font); font-weight: 700; font-size: 15px; }
+  html[data-theme="garden"] img.thumb, html[data-theme="garden"] .card .ph img { border-radius: 12px; border: 2px solid #d9c6f5; }
+
+  /* ---------- Unicorn Sparkle theme: rainbows and glitter ---------- */
+  html[data-theme="sparkle"] { --bg: #fdf7ff; --panel: #fffdff; --ink: #3a2d4a; --muted: #7f6e93; --line: #eedff7; --accent: #b14fd6; --accent-ink: #ffffff; --row-hover: #f8eefe; --chip: #f3e6fb; --header-bg: linear-gradient(90deg, #ff9fcf 0%, #c4a3ff 50%, #8fd8ff 100%); --header-ink: #3a2d4a; --header-line: #ffffff; --tab-line: 3px solid #b14fd6; --love: #d23f9a; --love-bg: #fde4f3; --like: #7a55d6; --like-bg: #ece5fb; --hate: #6f7f99; --hate-bg: #e9edf4; --title-font: "Fredoka", system-ui, sans-serif; --pattern: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%3Ctext%20x%3D%2714%27%20y%3D%2738%27%20font-size%3D%2722%27%20opacity%3D%270.13%27%3E%E2%9C%A8%3C%2Ftext%3E%3Ctext%20x%3D%2770%27%20y%3D%2796%27%20font-size%3D%2722%27%20opacity%3D%270.13%27%3E%E2%AD%90%3C%2Ftext%3E%3C%2Fsvg%3E"); }
+  @media (prefers-color-scheme: dark) { html[data-theme="sparkle"] { --bg: #170f1f; --panel: #21162c; --ink: #f6ecff; --muted: #c2abd6; --line: #3a2a4a; --accent: #e08bff; --accent-ink: #241030; --row-hover: #2a1c38; --chip: #2f2140; --header-bg: linear-gradient(90deg, #8a3f74 0%, #5e4596 50%, #2f6a8f 100%); --header-ink: #ffffff; --love: #ff8fd0; --love-bg: #45193a; --like: #c4a6ff; --like-bg: #2c2344; --hate: #a9b4c8; --hate-bg: #2f2140; --pattern: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%3Ctext%20x%3D%2714%27%20y%3D%2738%27%20font-size%3D%2722%27%20opacity%3D%270.09%27%3E%E2%9C%A8%3C%2Ftext%3E%3Ctext%20x%3D%2770%27%20y%3D%2796%27%20font-size%3D%2722%27%20opacity%3D%270.09%27%3E%E2%AD%90%3C%2Ftext%3E%3C%2Fsvg%3E"); } }
+  html[data-theme="sparkle"] header { border-bottom: 4px solid var(--header-line); padding: 14px 24px; }
+  html[data-theme="sparkle"] .tab { font-family: var(--title-font); font-weight: 700; font-size: 15px; }
+  html[data-theme="sparkle"] img.thumb, html[data-theme="sparkle"] .card .ph img { border-radius: 12px; border: 2px solid #f0c4ef; }
+
+  /* ---------- Beach Day theme: dolphins, shells and waves ---------- */
+  html[data-theme="beach"] { --bg: #fbf6ea; --panel: #fffdf7; --ink: #1f3640; --muted: #6b7f86; --line: #eadfc6; --accent: #0e8fa3; --accent-ink: #ffffff; --row-hover: #eef8f8; --chip: #e6f3f3; --header-bg: linear-gradient(180deg, #3fc1cf 0%, #1b84a3 100%); --header-ink: #ffffff; --header-line: #f3e2b8; --tab-line: 3px solid #0e8fa3; --love: #e0605a; --love-bg: #fde6e4; --like: #0e8fa3; --like-bg: #def3f4; --hate: #6b7f86; --hate-bg: #ecefe9; --title-font: "Fredoka", system-ui, sans-serif; --pattern: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%3Ctext%20x%3D%2714%27%20y%3D%2738%27%20font-size%3D%2722%27%20opacity%3D%270.13%27%3E%F0%9F%90%9A%3C%2Ftext%3E%3Ctext%20x%3D%2770%27%20y%3D%2796%27%20font-size%3D%2722%27%20opacity%3D%270.13%27%3E%F0%9F%8C%8A%3C%2Ftext%3E%3C%2Fsvg%3E"); }
+  @media (prefers-color-scheme: dark) { html[data-theme="beach"] { --bg: #0d1a1f; --panel: #12242b; --ink: #e6f3f4; --muted: #9ab3b8; --line: #213840; --accent: #5fd3e0; --accent-ink: #06252c; --row-hover: #163038; --chip: #1a323a; --header-bg: linear-gradient(180deg, #136a80 0%, #0d4d5f 100%); --love: #ff8f87; --love-bg: #3b1a18; --like: #5fd3e0; --like-bg: #12343b; --hate: #9ab3b8; --hate-bg: #1a323a; --pattern: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%3Ctext%20x%3D%2714%27%20y%3D%2738%27%20font-size%3D%2722%27%20opacity%3D%270.09%27%3E%F0%9F%90%9A%3C%2Ftext%3E%3Ctext%20x%3D%2770%27%20y%3D%2796%27%20font-size%3D%2722%27%20opacity%3D%270.09%27%3E%F0%9F%8C%8A%3C%2Ftext%3E%3C%2Fsvg%3E"); } }
+  html[data-theme="beach"] header { border-bottom: 5px solid var(--header-line); padding: 14px 24px; }
+  html[data-theme="beach"] .tab { font-family: var(--title-font); font-weight: 700; font-size: 15px; }
+  html[data-theme="beach"] img.thumb, html[data-theme="beach"] .card .ph img { border-radius: 12px; border: 2px solid #bfe7ea; }
+
+  /* ---------- Cozy Cafe theme: lattes, cats and pastries ---------- */
+  html[data-theme="cafe"] { --bg: #faf5ef; --panel: #fffdf9; --ink: #3b2a1f; --muted: #87715f; --line: #eadccc; --accent: #a0522d; --accent-ink: #ffffff; --row-hover: #f6ede3; --chip: #f1e6d9; --header-bg: linear-gradient(180deg, #9c6b45 0%, #714a2d 100%); --header-ink: #fff8ef; --header-line: #e9c9a3; --tab-line: 3px solid #a0522d; --love: #b5452f; --love-bg: #f9e2da; --like: #7a5a3a; --like-bg: #efe5d8; --hate: #87715f; --hate-bg: #efe9e2; --title-font: "Quicksand", system-ui, sans-serif; --pattern: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%3Ctext%20x%3D%2714%27%20y%3D%2738%27%20font-size%3D%2722%27%20opacity%3D%270.13%27%3E%E2%98%95%3C%2Ftext%3E%3Ctext%20x%3D%2770%27%20y%3D%2796%27%20font-size%3D%2722%27%20opacity%3D%270.13%27%3E%F0%9F%90%BE%3C%2Ftext%3E%3C%2Fsvg%3E"); }
+  @media (prefers-color-scheme: dark) { html[data-theme="cafe"] { --bg: #17110c; --panel: #211912; --ink: #f5ebe0; --muted: #c0aa94; --line: #3a2c20; --accent: #e0a070; --accent-ink: #2a170a; --row-hover: #2a2017; --chip: #2f241a; --header-bg: linear-gradient(180deg, #5c3d26 0%, #3f2a1a 100%); --love: #ff9b85; --love-bg: #43201a; --like: #e0c09a; --like-bg: #33271b; --hate: #c0aa94; --hate-bg: #2f241a; --pattern: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27120%27%20height%3D%27120%27%20viewBox%3D%270%200%20120%20120%27%3E%3Ctext%20x%3D%2714%27%20y%3D%2738%27%20font-size%3D%2722%27%20opacity%3D%270.09%27%3E%E2%98%95%3C%2Ftext%3E%3Ctext%20x%3D%2770%27%20y%3D%2796%27%20font-size%3D%2722%27%20opacity%3D%270.09%27%3E%F0%9F%90%BE%3C%2Ftext%3E%3C%2Fsvg%3E"); } }
+  html[data-theme="cafe"] header { border-bottom: 4px solid var(--header-line); padding: 14px 24px; }
+  html[data-theme="cafe"] .tab { font-family: var(--title-font); font-weight: 700; font-size: 15px; }
+  html[data-theme="cafe"] img.thumb, html[data-theme="cafe"] .card .ph img { border-radius: 12px; border: 2px solid #e6cfb4; }
+
+  .emoji-art { display: inline-block; line-height: 1; }
+
+  /* scoreboard + family match */
+  .score-intro { color: var(--muted); font-size: 13px; margin: 2px 2px 4px; }
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .score-card { background: var(--panel); border: 1px solid var(--line); border-top: 4px solid var(--pc); border-radius: 14px; padding: 14px; display: grid; gap: 10px; }
+  .score-head { display: flex; align-items: center; gap: 10px; }
+  .init.big { width: 42px; height: 42px; border-radius: 50%; background: var(--pc); color: #fff; display: grid; place-items: center; font-weight: 700; flex: none; }
+  .score-name { font: 700 17px var(--title-font); }
+  .score-pts { margin-left: auto; font: 800 26px var(--title-font); color: var(--pc); white-space: nowrap; }
+  .score-stats { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 13px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .bdg { font-size: 12px; padding: 3px 9px; border-radius: 999px; background: var(--chip); color: var(--muted); opacity: .5; filter: grayscale(1); cursor: help; }
+  .bdg.on { opacity: 1; filter: none; color: var(--ink); background: color-mix(in srgb, var(--pc) 16%, var(--panel)); border: 1px solid color-mix(in srgb, var(--pc) 45%, transparent); }
+  .section-title.match { color: var(--love); }
+  .badge.matchb { color: var(--love); background: var(--love-bg); font-size: 11px; margin-left: 2px; white-space: nowrap; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 9998; max-width: min(560px, calc(100vw - 24px));
+    background: var(--panel); color: var(--ink); border: 2px solid var(--love); border-radius: 14px; padding: 12px 18px; font-size: 15px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.25); text-align: center; }
+  .toast[hidden] { display: none; }
 
   header .theme-sel { width: auto; background: transparent; color: var(--header-ink); border: 1px solid color-mix(in srgb, var(--header-ink) 35%, transparent); border-radius: 7px; padding: 6px 8px; }
   header .theme-sel option { color: #1b1f24; background: #fff; }
@@ -296,6 +344,13 @@
   .who-pick button.truckyard { background: var(--plate-light), linear-gradient(180deg, #3a4450, #232a33); color: #fff; border-color: #f59e0b; font-family: "Oswald", system-ui, sans-serif; text-transform: uppercase; letter-spacing: .04em; }
   .who-pick button.truckyard .tag { color: #d6dde5; text-transform: none; letter-spacing: 0; }
   .who-pick button.farmhouse .last, .who-pick button.truckyard .last { color: #fff; }
+  .who-pick button.garden { background: linear-gradient(180deg, #c4a8f0, #9a74d8); color: #fff; border-color: #f1e6ff; font-family: "Quicksand", system-ui, sans-serif; font-weight: 700; }
+  .who-pick button.sparkle { background: linear-gradient(135deg, #ffb3d9, #c9b3ff, #a8e6ff); color: #3a2d4a; border-color: #ffffff; }
+  .who-pick button.beach { background: linear-gradient(180deg, #4cc8d4, #1b84a3); color: #fff; border-color: #f3e2b8; }
+  .who-pick button.cafe { background: linear-gradient(180deg, #a87148, #7a4f30); color: #fff8ef; border-color: #e9c9a3; font-family: "Quicksand", system-ui, sans-serif; font-weight: 700; }
+  .who-pick button.garden .tag, .who-pick button.beach .tag, .who-pick button.cafe .tag { color: rgba(255,255,255,.88); }
+  .who-pick button.sparkle .tag { color: #5b4970; }
+  .who-pick button.garden .last, .who-pick button.beach .last, .who-pick button.cafe .last { color: #fff; }
   .landing-art { flex-wrap: wrap; }
 
   /* phone cards */
@@ -330,7 +385,7 @@
     header h1 small { display: none; }
     header .spacer { display: none; }
     header .ghost { padding: 5px 9px; font-size: 12px; }
-    .mascots svg:not(:last-child) { display: none; }
+    .mascots svg:not(:last-child), .mascots .emoji-art:not(:last-child) { display: none; }
     .summary { order: 10; flex: 1 1 100%; font-size: 12px; text-align: center; }
     main { padding: 10px 10px 32px; }
     .statusrow { flex-wrap: wrap; }
@@ -418,6 +473,7 @@
 
   <div class="tabs">
     <button class="tab on" data-tab="family"><span data-label="family">Family list</span> <span id="nFamily"></span></button>
+    <button class="tab" data-tab="score">🏆 Scoreboard</button>
     <button class="tab" data-tab="picks"><span data-label="picks">Top picks</span> <span id="nPicks"></span></button>
     <button class="tab" data-tab="all">All matches <span id="nAll"></span></button>
     <button class="tab" data-tab="dealers">Dealers to visit <span id="nDealers"></span></button>
@@ -458,6 +514,7 @@
   </div>
 </section>
 <div class="fx-layer" id="fx" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" hidden></div>
 
 <dialog id="photoDlg" class="photo-dlg" aria-label="Photo preview">
   <div class="photo-stage" id="photoStage">
@@ -536,6 +593,7 @@ const ART = {
 /* votes mean the same for everyone; each person's theme just dresses them differently */
 const VOTES = ["love", "like", "hate"];
 const POINTS = {love: 3, like: 1, hate: -3};
+const EMOJI = e => s => `<span class="emoji-art" style="font-size:${Math.round(s * .82)}px">${e}</span>`;
 const THEMES = {
   classic: {
     name: "🚗 Classic", logo: () => "🚗", title: () => "Car Finder", sub: "", mascots: () => "", addIcon: () => "➕",
@@ -578,10 +636,55 @@ const THEMES = {
     emptyArt: () => ART.truck(140), loading: "Firing up the engine",
     burst: {love: ["🛻", "🚚", "❤️", "🏁", "⛽", "🔧", "❤️", "🛻"], like: ["👍", "🔧", "✨"], hate: ["🗑️", "💥", "🛻", "🚧", "💨", "🔩"]},
   },
+  garden: {
+    name: "🌸 Garden Party", logo: () => EMOJI("🌸")(30), title: w => w ? `${w}'s Car Garden` : "The Family Car Garden",
+    sub: "Pick the prettiest ride in the garden",
+    mascots: () => ["🌷", "🦋", "🌸"].map(e => EMOJI(e)(34)).join(""), addIcon: () => EMOJI("🌷")(28),
+    icon: {love: "🌸", like: "🦋", hate: "🥀"}, words: {love: "In bloom (love)", like: "Butterfly (like)", hate: "Wilted (hate)"},
+    heads: {loved: "🌸 In full bloom: loved", liked: "🦋 Fluttering by: liked", mixed: "🌱 Still growing: mixed or not voted", hated: "🥀 Wilted: hated"},
+    tabs: {family: "🌸 Family bouquet", picks: "🌼 Top picks"},
+    empty: "Nothing planted yet. Tap 🌸 🦋 or 🥀 on any car, or add one you found.",
+    emptyArt: () => ["🌷", "🦋", "🌸"].map(e => EMOJI(e)(70)).join(" "), loading: "Watering the garden",
+    burst: {love: ["🌸", "🌷", "🦋", "💐", "🌼", "🚗", "💜", "🌸"], like: ["🦋", "🌱", "✨"], hate: ["🥀", "🍂", "🗑️", "💥", "🚗"]},
+  },
+  sparkle: {
+    name: "🦄 Unicorn Sparkle", logo: () => EMOJI("🦄")(30), title: w => w ? `${w}'s Magic Ride` : "The Family Magic Ride",
+    sub: "Rainbows, glitter and one very magical car",
+    mascots: () => ["🌈", "✨", "🦄"].map(e => EMOJI(e)(34)).join(""), addIcon: () => EMOJI("🦄")(28),
+    icon: {love: "🦄", like: "🌈", hate: "🌧️"}, words: {love: "Magical (love)", like: "Rainbow (like)", hate: "Rain cloud (hate)"},
+    heads: {loved: "🦄 Pure magic: loved", liked: "🌈 Over the rainbow: liked", mixed: "✨ Still sparkling: mixed or not voted", hated: "🌧️ Rain clouds: hated"},
+    tabs: {family: "🦄 Family magic", picks: "🌈 Top picks"},
+    empty: "No magic yet. Tap 🦄 🌈 or 🌧️ on any car, or add one you found.",
+    emptyArt: () => ["🌈", "🦄", "✨"].map(e => EMOJI(e)(70)).join(" "), loading: "Sprinkling glitter",
+    burst: {love: ["🦄", "🌈", "✨", "💖", "⭐", "🚗", "💜", "🦄"], like: ["🌈", "✨", "⭐"], hate: ["🌧️", "⚡", "🗑️", "💥", "🚗"]},
+  },
+  beach: {
+    name: "🐬 Beach Day", logo: () => EMOJI("🐬")(30), title: w => w ? `${w}'s Beach Cruiser` : "The Family Beach Cruiser",
+    sub: "Sun, sand and a ride that's ready for road trips",
+    mascots: () => ["🌴", "🐢", "🐬"].map(e => EMOJI(e)(34)).join(""), addIcon: () => EMOJI("🐬")(28),
+    icon: {love: "🐬", like: "🐚", hate: "🦈"}, words: {love: "Splash (love)", like: "Seashell (like)", hate: "Shark bait (hate)"},
+    heads: {loved: "🐬 Making waves: loved", liked: "🐚 Beach finds: liked", mixed: "🏖️ Low tide: mixed or not voted", hated: "🦈 Shark bait: hated"},
+    tabs: {family: "🐬 Family beach", picks: "🌊 Top picks"},
+    empty: "The beach is empty. Tap 🐬 🐚 or 🦈 on any car, or add one you found.",
+    emptyArt: () => ["🌴", "🐬", "🐢"].map(e => EMOJI(e)(70)).join(" "), loading: "Catching a wave",
+    burst: {love: ["🐬", "🌊", "🐚", "🐢", "🌴", "🚗", "💙", "🐬"], like: ["🐚", "🌊", "✨"], hate: ["🦈", "🌧️", "🗑️", "💥", "🚗"]},
+  },
+  cafe: {
+    name: "☕ Cozy Café", logo: () => EMOJI("☕")(30), title: w => w ? `${w}'s Car Café` : "The Family Car Café",
+    sub: "Grab a latte, pet the cat, find the car",
+    mascots: () => ["🥐", "🐈", "☕"].map(e => EMOJI(e)(34)).join(""), addIcon: () => EMOJI("☕")(28),
+    icon: {love: "☕", like: "🐈", hate: "😾"}, words: {love: "Fresh brew (love)", like: "Purr (like)", hate: "Hiss (hate)"},
+    heads: {loved: "☕ Fresh brew: loved", liked: "🐈 Curled up: liked", mixed: "🥐 Still baking: mixed or not voted", hated: "😾 Hiss: hated"},
+    tabs: {family: "☕ Family café", picks: "🥐 Top picks"},
+    empty: "The café is quiet. Tap ☕ 🐈 or 😾 on any car, or add one you found.",
+    emptyArt: () => ["🥐", "☕", "🐈"].map(e => EMOJI(e)(70)).join(" "), loading: "Brewing a fresh pot",
+    burst: {love: ["☕", "🐈", "🥐", "🧁", "💛", "🚗", "🍪", "☕"], like: ["🐈", "☕", "✨"], hate: ["😾", "🧊", "🗑️", "💥", "🚗"]},
+  },
 };
 let familyThemes = {};   // name -> theme key, chosen during setup (config.json "family")
 const defaultTheme = n => THEMES[familyThemes[n]] ? familyThemes[n] : "classic";
-const THEME_ART = {ballpark: s => ART.softball(s), farmhouse: s => ART.heart(s), truckyard: s => ART.truck(s)};
+const THEME_ART = {ballpark: s => ART.softball(s), farmhouse: s => ART.heart(s), truckyard: s => ART.truck(s),
+  garden: s => EMOJI("🌷")(s), sparkle: s => EMOJI("🦄")(s), beach: s => EMOJI("🐬")(s), cafe: s => EMOJI("☕")(s)};
 const pcolor = n => `var(--p${Math.max(0, family.indexOf(n)) % 6})`;   // each person keeps their color everywhere
 const initials = n => family.some(o => o !== n && o[0] === n[0]) ? n.slice(0, 2) : n[0];   // two names starting with the same letter show two letters
 
@@ -660,7 +763,8 @@ async function init() {
 }
 
 /* ---------- who's viewing + theme ---------- */
-const TAGLINE = {ballpark: "Softball, dogs & capybaras edition", farmhouse: "Hearts, dogs, goats & sheep edition", truckyard: "Truck yard edition"};
+const TAGLINE = {ballpark: "Softball, dogs & capybaras edition", farmhouse: "Hearts, dogs, goats & sheep edition", truckyard: "Truck yard edition",
+  garden: "Flowers & butterflies edition", sparkle: "Rainbows & unicorns edition", beach: "Dolphins & seashells edition", cafe: "Lattes & cats edition"};
 
 function pickWho() {
   $("#landingArt").innerHTML = `${ART.truck(70)}${ART.heart(30)}${ART.sheep(52)}${ART.goat(54)}${ART.softball(40)}${ART.dog(46)}${ART.capybara(70)}`;
@@ -894,7 +998,13 @@ const voteKey = url => voteAlias.get(url) || url;
 const votesFor = url => (votes[voteKey(url)] && votes[voteKey(url)].votes) || {};
 const pointsFor = url => Object.values(votesFor(url)).reduce((s, v) => s + (POINTS[v] || 0), 0);
 
+/* ---------- family games: matches, points and badges ---------- */
+const MATCH_HEAD = "💞 It's a match! Everyone loves these";
+const everyoneLoves = vs => family.length > 1 && family.every(n => vs[n] === "love");
+const isMatch = url => everyoneLoves(votesFor(url));
+
 function band(row) {
+  if (everyoneLoves(row._votes)) return "match";
   const p = row._points, vs = Object.values(row._votes);
   if (!vs.length) return "mixed";
   if (p >= 3) return "loved";
@@ -961,6 +1071,7 @@ function render() {
   cf.hidden = !filter;
   cf.querySelector("span").textContent = filter ? filter.label : "";
   if (tab === "family") return renderFamily(visible(fam));
+  if (tab === "score") return renderScore();
   if (!data) { $("#view").innerHTML = emptyState("No searches yet. Set the filters and press Search."); return; }
   if (tab === "dealers") return renderDealers(dealers(all));
   if (tab === "models") return renderModels(models(visible(all)));
@@ -1001,7 +1112,7 @@ function voteCell(l) {
     }
     const v = vs[n];
     return `<span class="pv ${v ? "" : "none"}" style="--pc:${pcolor(n)}" title="${esc(n)}: ${v ? theme().words[v] : "no vote yet"}"><span class="init">${esc(initials(n))}</span>${v ? theme().icon[v] : "·"}</span>`;
-  }).join("") + `</div>`;
+  }).join("") + (isMatch(l.url) ? `<span class="badge matchb" title="Everyone in the family loves this one">💞 match</span>` : "") + `</div>`;
 }
 
 function links(l) {
@@ -1091,7 +1202,7 @@ function renderFamily(rows) {
   }
   const photos = $("#showPhotos").checked;
   const cols = 13 + (photos ? 1 : 0);
-  const heads = theme().heads;
+  const heads = {...theme().heads, match: MATCH_HEAD};
   const list = sortKey ? sortRows([...rows], sortKey, sortDesc) : rows;
   const cards = narrow.matches;
   let html = "", last = null, rank = 0;
@@ -1194,6 +1305,70 @@ function renderModels(list) {
   }));
 }
 
+/* ---------- scoreboard ---------- */
+const BADGES = [
+  {icon: "🗳️", name: "First vote", tip: "Voted on a car", test: s => s.votes >= 1},
+  {icon: "🔍", name: "Scout", tip: "Voted on 10 cars", test: s => s.votes >= 10},
+  {icon: "🏅", name: "Super scout", tip: "Voted on 25 cars", test: s => s.votes >= 25},
+  {icon: "💸", name: "Deal hunter", tip: "Liked or loved a car $2,000+ below market", test: s => s.bestDeal >= 2000},
+  {icon: "🧭", name: "Explorer", tip: "Added a car the search didn't find", test: s => s.found >= 1},
+  {icon: "🤝", name: "Team player", tip: "Voted the same as someone else on 3 cars", test: s => s.agree >= 3},
+  {icon: "💞", name: "Matchmaker", tip: "Part of a family match: everyone loved the same car", test: s => s.matches >= 1},
+  {icon: "🧐", name: "Tough critic", tip: "Said 'hate' 5 times (saying no helps too!)", test: s => s.hates >= 5},
+];
+
+function scoreStats() {
+  const stats = family.map(n => ({name: n, votes: 0, loves: 0, hates: 0, found: 0, matches: 0, agree: 0, bestDeal: 0}));
+  const by = Object.fromEntries(stats.map(x => [x.name, x]));
+  for (const r of familyRows()) {
+    const vs = r._votes, match = everyoneLoves(vs);
+    if (r._manual && by[r._added_by]) by[r._added_by].found++;
+    for (const [n, v] of Object.entries(vs)) {
+      const x = by[n];
+      if (!x) continue;
+      x.votes++;
+      if (v === "love") x.loves++;
+      if (v === "hate") x.hates++;
+      if (match) x.matches++;
+      if (Object.entries(vs).some(([m, w]) => m !== n && w === v)) x.agree++;
+      if (v !== "hate" && r.price_diff != null && -r.price_diff > x.bestDeal) x.bestDeal = -r.price_diff;
+    }
+  }
+  for (const x of stats) {
+    x.badges = BADGES.filter(b => b.test(x));
+    x.points = x.votes + 3 * x.found + 5 * x.matches + 2 * x.badges.length;
+  }
+  return stats.sort((a, b) => b.points - a.points);
+}
+
+function renderScore() {
+  const stats = scoreStats(), t = theme();
+  const best = stats.length ? stats[0].points : 0;
+  const matches = familyRows().filter(r => everyoneLoves(r._votes));
+  const cards = stats.map(x => `<section class="score-card" style="--pc:${pcolor(x.name)}">
+      <div class="score-head"><span class="init big">${esc(initials(x.name))}</span>
+        <div><div class="score-name">${best && x.points === best ? "👑 " : ""}${esc(x.name)}</div><div class="sub">${esc((THEMES[defaultTheme(x.name)] || THEMES.classic).name)}</div></div>
+        <div class="score-pts">${x.points}<span class="sub"> pts</span></div></div>
+      <div class="score-stats"><span>🗳️ ${x.votes} ${x.votes === 1 ? "vote" : "votes"}</span><span>${t.icon.love} ${x.loves}</span><span>🧭 ${x.found} found</span><span>💞 ${x.matches} ${x.matches === 1 ? "match" : "matches"}</span>${x.bestDeal ? `<span>💸 best find ${money(x.bestDeal)} under market</span>` : ""}</div>
+      <div class="badges">${BADGES.map(b => `<span class="bdg ${x.badges.includes(b) ? "on" : ""}" title="${esc(b.tip)}">${b.icon} ${esc(b.name)}</span>`).join("")}</div>
+    </section>`).join("");
+  const matchList = matches.length
+    ? `<div class="card-section"><span class="section-title match">${MATCH_HEAD}</span><div class="sub">These are your first test drives.</div></div>` + matches.map(l => carCard(l, {})).join("")
+    : `<p class="note">No family match yet. When everyone loves the same car, it lands here, and that's the first test drive to book.</p>`;
+  setView(`<p class="score-intro">Points: 1 per vote, 3 for each car you find that the search missed, 5 for each family match, 2 per badge. Hover a badge to see how to earn it.</p>
+    <div class="score-grid">${cards}</div>${matchList}`, true);
+}
+
+function celebrateMatch(l) {
+  flurry("love", null);
+  setTimeout(() => flurry("love", null), 450);
+  const box = $("#toast");
+  box.innerHTML = `💞 <b>It's a match!</b> Everyone loves the ${esc(l.year)} ${esc(l.make)} ${esc(l.model)}. Time to book a test drive!`;
+  box.hidden = false;
+  clearTimeout(celebrateMatch.timer);
+  celebrateMatch.timer = setTimeout(() => { box.hidden = true; }, 6000);
+}
+
 /* ---------- voting ---------- */
 async function castVote(url, v, el) {
   if (STATIC) return;
@@ -1207,7 +1382,12 @@ async function castVote(url, v, el) {
     el && el.classList.add("pop");
     flurry(v, el && el.getBoundingClientRect(), el && el.closest("[data-card]"));
   }
-  try { votes = await api("/api/vote", {listing, who, vote: current === v ? null : v}); render(); }
+  const wasMatch = isMatch(url);
+  try {
+    votes = await api("/api/vote", {listing, who, vote: current === v ? null : v});
+    render();
+    if (!wasMatch && isMatch(url)) celebrateMatch(listing);
+  }
   catch (err) { setStatus(`<span class="chip err">Vote failed: ${esc(err.message)}</span>`); }
 }
 

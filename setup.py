@@ -18,6 +18,10 @@ THEMES = {
     "ballpark": "Ballpark: softball, dogs and capybaras",
     "farmhouse": "Farmhouse: hearts, dogs, goats and sheep",
     "truckyard": "Truck Yard: pickups, diamond plate, hazard stripes",
+    "garden": "Garden Party: flowers and butterflies",
+    "sparkle": "Unicorn Sparkle: rainbows, unicorns and glitter",
+    "beach": "Beach Day: dolphins, seashells and waves",
+    "cafe": "Cozy Cafe: lattes, cats and pastries",
 }
 
 

@@ -3,20 +3,59 @@
 A little app for shopping for a used car **as a family**. Instead of texting links and screenshots back and forth, everyone opens the
 same page on your home Wi-Fi, votes on cars, and the family's favorites (and the local dealers worth a visit) rise to the top.
 
-It runs on one computer in your house. It's not a polished product or a hosted service, just a handy family tool. Curious builders
-are welcome to take it further.
+It's also a way to bring your kids into the decision. Every vote comes with emoji reactions, everyone earns points and badges, and
+when the whole family loves the same car, it's a **💞 Family Match**: that's your first test drive.
+
+It runs on one computer in your house. It's not a polished product or a hosted service, just a handy family tool.
+
+## 🔒 Privacy: it stays at home
+
+- **Runs on your own computer.** There's no account, no sign-up, no cloud server, and no tracking or analytics.
+- **Your family's info stays on that computer.** Names, votes, notes and searches are saved only in files on the computer running it
+  (`config.json` and the `results/` folder). They're never uploaded anywhere, and they're excluded from git so they can't be pushed by accident.
+- **No AI.** The app doesn't use AI, chatbots or machine learning, and nothing you type is sent to an AI service. Ranking is plain arithmetic:
+  price vs. estimated market value, plus your family's vote points.
+- **What does use the internet:**
+  - **Searching** contacts CarGurus, Autotrader, Cars.com and Carvana with your ZIP and filters, the same as visiting those sites in a browser.
+  - **Car photos** load from those sites.
+  - **Pasting a link** into "Add a car we found" opens that page to read the car's details.
+  - **Setup** downloads the Python packages it needs and a US ZIP-code table (GeoNames), once.
+  - **Fonts are bundled** with the app, so the page doesn't load anything from Google.
+- **Home network only.** There are no passwords: anyone on your Wi-Fi with the link can open the page. Don't expose it to the internet
+  (no port forwarding).
 
 ## What it does
 
 - **Searches the big sites for you:** CarGurus, Autotrader, Cars.com and Carvana, near your ZIP, for the body style, budget and mileage you set.
 - **Keeps the list short:** ranks cars by price vs. estimated market value and shows the top picks, so you see a few dozen good options, not thousands.
 - **Puts cars you can go see first:** 📍 local dealers you can visit and test-drive are listed ahead of 🚚 online sellers that deliver.
-- **Lets everyone vote:** each person taps their name, then marks cars **love / like / hate**. Votes show up for everyone.
-- **Learns from votes:** hate one Chevy Trax and every Trax sinks; like a model and it moves up a little. The **Family list** tab ranks everything you've voted on.
-- **Shows which dealers are worth the drive:** the **Dealers to visit** tab ranks nearby dealers by how many good matches (and family favorites) they have.
+- **Lets everyone vote:** each person taps their name, then reacts to cars with **love / like / hate**. Votes show up for everyone.
+- **Learns from votes:** hate one Chevy Trax and every Trax sinks; like a model and it moves up a little. The **Family list** ranks everything you've voted on.
+- **Shows which dealers are worth the drive:** **Dealers to visit** ranks nearby dealers by good matches and family favorites.
 - **Takes cars you found yourself:** **➕ Add a car we found** lets you paste a link and it fills in the details.
-- **Has a look for everyone:** each person picks a theme: 🚗 Classic, 🥎 Ballpark (softball, dogs, capybaras), 💖 Farmhouse (hearts, dogs, goats, sheep) or 🛻 Truck Yard. Votes come with little reaction flurries.
 - **Works on phones and computers.**
+
+## Make it a family game 🎮
+
+- **Pick a look:** each person chooses a theme during setup, and votes become emoji reactions with confetti-style flurries:
+  - 🚗 Classic
+  - 🥎 Ballpark (softball, dogs, capybaras)
+  - 💖 Farmhouse (hearts, dogs, goats, sheep)
+  - 🛻 Truck Yard
+  - 🌸 Garden Party (flowers, butterflies)
+  - 🦄 Unicorn Sparkle (rainbows, glitter)
+  - 🐬 Beach Day (dolphins, seashells)
+  - ☕ Cozy Café (lattes, cats)
+- **💞 Family Match:** when everyone loves the same car, the page celebrates and the car jumps to the top. Book that test drive first.
+- **🏆 Scoreboard:** points for voting, finding cars and making matches, plus badges like 🔍 Scout, 💸 Deal Hunter, 🧭 Explorer,
+  🤝 Team Player and 💞 Matchmaker. Whoever's in the lead gets the 👑.
+
+### Ideas for parents and kids
+
+- **Give kids real jobs.** The 💸 **Deal Hunter** badge goes to spotting a car well below market value, and 🧭 **Explorer** to finding one the search missed.
+- **Talk about what the numbers mean.** Why might a car be cheap? (High miles? An accident?) Is a local car you can test-drive worth more than one delivered?
+- **Make a family rule:** test-drive the 💞 matches first. Everyone's vote counts.
+- **Let older kids own a piece:** comparing mileage, checking a car's history, or planning the route to the dealers.
 
 ## Setup (about 5 minutes)
 
@@ -46,8 +85,8 @@ Run setup again any time to change your answers. Votes and past searches are kep
 ## How the family uses it
 
 1. Open the family link (on the same Wi-Fi) and **tap your name**. Your phone remembers you.
-2. Vote **love / like / hate** on cars. Tap a car's **photo** to see it big; tap **anywhere else on the car** to open the dealer's listing.
-3. Check the **Family list** tab for the ranked shortlist, and **Dealers to visit** to plan test drives.
+2. React to cars: **love / like / hate**. Tap a car's **photo** to see it big; tap **anywhere else on the car** to open the dealer's listing.
+3. Check the **Family list** for the ranked shortlist, the **🏆 Scoreboard** for points and badges, and **Dealers to visit** to plan test drives.
 4. Found a car somewhere else? **➕ Add a car we found** and paste the link.
 
 To refresh the listings in a few days, click **Edit filters → Search**. Votes carry over, price changes are flagged, and cars that
@@ -60,12 +99,10 @@ disappeared are marked *may be sold*.
 - **`carsearch/market.py`:** estimates market value: CarGurus' own estimate where available, otherwise a fit over similar cars.
 - **`carsearch/reputation.py`:** rates sellers (national retailer → dealer group → franchise / high-volume → independent), since sites don't publish dealer sales volume.
 - **`car_agent.py`:** a tiny Flask server, plus a command line: `python car_agent.py search --open` writes a standalone HTML report.
-- **`web/index.html`:** the whole page in one file (no build step).
+- **`web/index.html`:** the whole page in one file (no build step). The fonts in `web/fonts/` are bundled under the SIL Open Font License.
 
-Votes live in `results/votes.json`. Your settings live in `config.json`. Neither is committed to git.
-
-**Porting it to a hosted app?** You'd want real sign-in instead of "tap your name" (there's no password: it's meant for a home
-network), a database instead of JSON files, a background job for searches, and a careful read of each site's terms of use.
+**Porting it to a hosted app?** You'd want real sign-in instead of "tap your name", a database instead of JSON files, a background job
+for searches, a privacy policy, and a careful read of each site's terms of use.
 
 ## Good to know
 
@@ -76,4 +113,4 @@ network), a database instead of JSON files, a background job for searches, and a
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE). Bundled fonts (Fredoka, Quicksand, Oswald) are under the SIL Open Font License: see `web/fonts/OFL-*.txt`.

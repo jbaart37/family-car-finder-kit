@@ -170,6 +170,10 @@ def serve(port, open_browser, share):
     def index():
         return send_from_directory(WEB, "index.html")
 
+    @app.get("/fonts/<path:name>")
+    def fonts(name):   # bundled theme fonts, so the page never loads anything from Google
+        return send_from_directory(WEB / "fonts", name)
+
     @app.get("/api/meta")
     def meta():
         cfg = load_config()
