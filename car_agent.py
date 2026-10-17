@@ -23,6 +23,8 @@ WEB = ROOT / "web"
 REPORTS = ROOT / "reports"
 VOTES = RESULTS / "votes.json"
 VOTE_VALUES = ("love", "like", "hate")
+THEME_KEYS = ("classic", "ballpark", "farmhouse", "truckyard", "garden", "sparkle", "beach", "cafe")
+MAX_FAMILY = 8
 PROFILE_KEYS = ("zip", "radius", "body", "max_price", "max_miles", "min_year", "keywords", "sources", "sizes",
                 "min_tier", "max_local", "max_online", "max_per_model")
 _lock = threading.Lock()
@@ -253,6 +255,31 @@ def serve(port, open_browser, share):
             listing["price_diff"] = (listing["price"] - listing["market_value"]
                                      if listing["price"] and listing["market_value"] else None)
             return jsonify(set_vote(listing, who, d.get("vote"), manual={"note": str(d.get("note") or "")[:300]}))
+        except ValueError as e:
+            return jsonify(error=str(e)), 400
+
+    @app.post("/api/family")
+    def family_join():
+        """Someone new joins from the "Who's car shopping?" screen. Saved to config.json so it survives restarts."""
+        d = request.get_json(force=True)
+        name = " ".join(str(d.get("name") or "").split())[:30]
+        theme = d.get("theme") if d.get("theme") in THEME_KEYS else "classic"
+        try:
+            if not name:
+                raise ValueError("type a name first")
+            with _lock:
+                cfg = load_config()
+                people = cfg.get("family") or [{"name": n, "theme": "classic"} for n in cfg.get("family_members", [])]
+                same = next((p["name"] for p in people if p.get("name", "").lower() == name.lower()), None)
+                if same:
+                    raise ValueError(f"{same} is already in the family. Tap their name instead")
+                if len(people) >= MAX_FAMILY:
+                    raise ValueError(f"the family is full ({MAX_FAMILY} people). Run setup to make changes")
+                people.append({"name": name, "theme": theme})
+                cfg["family"] = people
+                cfg.pop("family_members", None)
+                (ROOT / "config.json").write_text(json.dumps(cfg, indent=2), encoding="utf-8")
+            return jsonify(family=family_members(cfg), family_themes=family_themes(cfg))
         except ValueError as e:
             return jsonify(error=str(e)), 400
 

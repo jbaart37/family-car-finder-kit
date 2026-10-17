@@ -14,7 +14,7 @@
     --local: #1a7f37; --local-bg: #e6f4ea; --online: #8250df; --online-bg: #f3edfc;
     --t3: #0b5cad; --t3-bg: #e7f0fb;
     --love: #d1245a; --love-bg: #fde8ef; --like: #0b5cad; --like-bg: #e7f0fb; --hate: #66707c; --hate-bg: #eef1f4;
-    --p0: #1f6feb; --p1: #bf3989; --p2: #c99700; --p3: #1a7f37; --p4: #8250df; --p5: #cf222e;
+    --p0: #1f6feb; --p1: #bf3989; --p2: #c99700; --p3: #1a7f37; --p4: #8250df; --p5: #cf222e; --p6: #0b7285; --p7: #a5490f;
     --header-bg: var(--panel); --header-ink: var(--ink); --header-line: var(--line);
     --title-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --tab-line: 2px solid var(--accent);
@@ -31,7 +31,7 @@
       --local: #57c27a; --local-bg: #16301f; --online: #c09cf5; --online-bg: #2a2140;
       --t3: #79b3ff; --t3-bg: #142a45;
       --love: #ff7aa2; --love-bg: #3d1424; --like: #79b3ff; --like-bg: #142a45; --hate: #98a2ae; --hate-bg: #232931;
-      --p0: #79b3ff; --p1: #f08ac3; --p2: #f2d34f; --p3: #57c27a; --p4: #c09cf5; --p5: #ff7b72;
+      --p0: #79b3ff; --p1: #f08ac3; --p2: #f2d34f; --p3: #57c27a; --p4: #c09cf5; --p5: #ff7b72; --p6: #66d9e8; --p7: #ffa94d;
     }
   }
 
@@ -338,6 +338,11 @@
   .who-pick button.ballpark .tag { color: #eaf5d0; }
   .who-pick button svg { flex: none; }
   .who-pick .last { font-size: 11px; font-weight: 600; color: var(--accent); }
+  .join { margin-top: 20px; }
+  .join-form { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; margin-top: 10px; }
+  .join-form input[type=text] { max-width: 220px; }
+  .join-form select { width: auto; }
+  .join-msg { flex-basis: 100%; color: var(--bad); }
   .who-pick button.ballpark .last { color: #e3f24a; }
   .who-pick button.farmhouse { background: var(--hearts), linear-gradient(180deg, #f08bb0, #cf4a7e); color: #fff; border-color: #ffd6e5; font-family: "Quicksand", system-ui, sans-serif; font-weight: 700; }
   .who-pick button.farmhouse .tag { color: #ffe9f1; }
@@ -511,6 +516,15 @@
     <h2>Who's car shopping?</h2>
     <p class="lead">Pick your name. This phone or computer will remember you, and your votes show up for everyone.</p>
     <div class="who-pick" id="whoPick"></div>
+    <div class="join" id="joinBox">
+      <button type="button" class="ghost" id="joinOpen">➕ New here? Join the family</button>
+      <form class="join-form" id="joinForm" hidden>
+        <input type="text" id="joinName" maxlength="30" placeholder="Your name" autocomplete="given-name" required>
+        <select id="joinTheme" title="Pick your look"></select>
+        <button class="primary" type="submit">Join</button>
+        <div class="note join-msg" id="joinMsg"></div>
+      </form>
+    </div>
   </div>
 </section>
 <div class="fx-layer" id="fx" aria-hidden="true"></div>
@@ -685,7 +699,7 @@ let familyThemes = {};   // name -> theme key, chosen during setup (config.json 
 const defaultTheme = n => THEMES[familyThemes[n]] ? familyThemes[n] : "classic";
 const THEME_ART = {ballpark: s => ART.softball(s), farmhouse: s => ART.heart(s), truckyard: s => ART.truck(s),
   garden: s => EMOJI("🌷")(s), sparkle: s => EMOJI("🦄")(s), beach: s => EMOJI("🐬")(s), cafe: s => EMOJI("☕")(s)};
-const pcolor = n => `var(--p${Math.max(0, family.indexOf(n)) % 6})`;   // each person keeps their color everywhere
+const pcolor = n => `var(--p${Math.max(0, family.indexOf(n)) % 8})`;   // each person keeps their color everywhere
 const initials = n => family.some(o => o !== n && o[0] === n[0]) ? n.slice(0, 2) : n[0];   // two names starting with the same letter show two letters
 
 let meta = null, data = null, votes = {}, family = [];
@@ -759,7 +773,16 @@ async function init() {
   const names = await refreshSaved();
   if (names.length) await loadSaved(names[0]);   // everyone opens to the latest family search
   else { $("#formPanel").hidden = false; render(); }
-  setInterval(async () => { try { votes = await api("/api/votes"); render(); } catch {} }, 20000);
+  $("#joinOpen").addEventListener("click", () => { $("#joinForm").hidden = false; $("#joinOpen").hidden = true; $("#joinName").focus(); });
+  $("#joinForm").addEventListener("submit", joinFamily);
+  setInterval(async () => {
+    try {
+      votes = await api("/api/votes");
+      const m = await api("/api/meta");   // someone may have joined the family since this page opened
+      if (JSON.stringify(m.family) !== JSON.stringify(family)) { family = m.family; familyThemes = m.family_themes || {}; }
+      render();
+    } catch {}
+  }, 20000);
 }
 
 /* ---------- who's viewing + theme ---------- */
@@ -777,9 +800,39 @@ function pickWho() {
     $("#landing").hidden = true;
     document.body.classList.remove("locked");
   }));
+  $("#joinTheme").innerHTML = Object.entries(THEMES).map(([k, t]) => `<option value="${k}">${esc(t.name)}</option>`).join("");
+  $("#joinBox").hidden = STATIC;
   $("#landing").hidden = false;
   document.body.classList.add("locked");
   $("#whoPick button").focus();
+}
+
+async function joinFamily(e) {
+  e.preventDefault();
+  const name = $("#joinName").value.trim();
+  if (!name) return;
+  $("#joinMsg").textContent = "";
+  try {
+    const j = await api("/api/family", {name, theme: $("#joinTheme").value});
+    family = j.family;
+    familyThemes = j.family_themes || {};
+    store.set(`carfinder.theme.${name}`, null);
+    setWho(name, true);
+    $("#landing").hidden = true;
+    document.body.classList.remove("locked");
+    $("#joinForm").hidden = true; $("#joinOpen").hidden = false; $("#joinName").value = "";
+    setTab("picks");
+    flurry("love", null);
+    showToast(`🎉 <b>Welcome to the family car hunt, ${esc(name)}!</b> Start by reacting to a few Top picks.`);
+  } catch (err) { $("#joinMsg").textContent = err.message; }
+}
+
+function showToast(html, ms = 6000) {
+  const box = $("#toast");
+  box.innerHTML = html;
+  box.hidden = false;
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => { box.hidden = true; }, ms);
 }
 
 function setWho(n, save) {

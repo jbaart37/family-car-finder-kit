@@ -114,6 +114,7 @@ Run setup again any time to change your answers. Votes and past searches are kep
 ## How the family uses it
 
 1. Open the family link (on the same Wi-Fi) and **tap your name**. Your phone remembers you.
+   Someone new (Grandma, a cousin, the friend who knows cars) can tap **➕ New here? Join the family** on that screen and pick a look.
 2. React to cars: **love / like / hate**. Tap a car's **photo** to see it big; tap **anywhere else on the car** to open the dealer's listing.
 3. Check the **Family list** for the ranked shortlist, the **🏆 Scoreboard** for points and badges, and **Dealers to visit** to plan test drives.
 4. Found a car somewhere else? **➕ Add a car we found** and paste the link.
