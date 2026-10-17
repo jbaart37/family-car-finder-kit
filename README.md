@@ -88,6 +88,8 @@ ranked by your votes and the price.
 
 ## Setup (about 5 minutes)
 
+✅ **Tested on Windows 11 and macOS (Apple Silicon).** Linux should work the same way with `./setup.sh` and `./start.sh`, but hasn't been tested yet.
+
 You need **Python 3.10 or newer**:
 - **Windows:** install from [python.org](https://www.python.org/downloads/) and tick *"Add python.exe to PATH"*.
 - **Mac:** the Python that comes with macOS (3.9) is too old. Install from [python.org](https://www.python.org/downloads/macos/),
